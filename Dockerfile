@@ -4,13 +4,19 @@ LABEL maintainer="lapicidae"
 
 WORKDIR /tmp
 
+ENV DEBIAN_FRONTEND="noninteractive" \
+    LANG="de_DE.UTF-8" \
+    LANGUAGE="de_DE:de" \
+    LC_ALL="de_DE.UTF-8"
+
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/
 
 RUN echo "**** install s6-overlay ****" && \
     tar zxf /tmp/s6-overlay-amd64.tar.gz -C / && \
     echo "**** install runtime packages ****" && \
     apt-get update -qq && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -qy \
+    apt-get install -qy \
+      bsd-mailx \
       libarchive13 \
       libcurl4 \
       libimlib2 \
@@ -25,6 +31,7 @@ RUN echo "**** install s6-overlay ****" && \
       libxslt1.1 \
       locales \
       python3 \
+      ssmtp \
       tzdata \
       unzip \
       uuid \
@@ -32,7 +39,7 @@ RUN echo "**** install s6-overlay ****" && \
       zlib1g && \
     if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
     echo "**** install build packages ****" && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -qy \
+    apt-get install -qy \
       build-essential \
       git \
       libarchive-dev \
@@ -53,6 +60,8 @@ RUN echo "**** install s6-overlay ****" && \
       zlib1g-dev && \
     if [ ! -e /usr/bin/python-config ]; then ln -sf python3-config /usr/bin/python-config ; fi && \
     echo "**** timezone and locale ****" && \
+    rm -f /etc/localtime && \
+    ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime && \
     echo "Europe/Berlin" > /etc/timezone && \
     dpkg-reconfigure -f noninteractive tzdata && \
     locale-gen de_DE.UTF-8 && \
@@ -66,6 +75,9 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/epgimages /var/cache/vdr/epgimages  && \
     mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www && \
     ln -s /epgd/channellogos /var/epgd/www/channellogos && \
+    echo "**** sendmail config ****" && \
+    mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak && \
+    ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
     echo "**** compile ****" && \
     wget https://projects.vdr-developer.org/git/vdr-epg-daemon.git/snapshot/vdr-epg-daemon-1.1.159.tar.gz && \
     tar xzf vdr-epg-daemon-1.1.159.tar.gz && \
@@ -94,11 +106,6 @@ RUN echo "**** install s6-overlay ****" && \
 
 # copy local files
 COPY root/ /
-
-ENV DEBIAN_FRONTEND="noninteractive" \
-    LANG="de_DE.UTF-8" \
-    LANGUAGE="de_DE:de" \
-    LC_ALL="de_DE.UTF-8"
 
 EXPOSE 9999
 
