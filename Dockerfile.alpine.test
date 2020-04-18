@@ -1,0 +1,18 @@
+FROM alpine:latest
+
+WORKDIR /tmp
+
+RUN apk add --no-cache git libarchive-dev libcurl libxslt libxslt-dev libxml2 mariadb-connector-c \
+      zlib openssl-dev libuuid util-linux-dev jansson-dev libmicrohttpd libmicrohttpd-dev \
+      imlib2 imlib2-dev libjpeg-turbo libjpeg-turbo-dev mariadb-connector-c-dev make g++\
+      libxml2 libxml2-dev python3 python3-dev &&\
+    apk add --no-cache -X http://dl-cdn.alpinelinux.org/alpine/edge/testing \
+      mailutils &&\
+    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi &&\
+    if [ ! -e /usr/bin/python-config ]; then ln -sf python3-config /usr/bin/python-config ; fi
+
+RUN cd /tmp &&\
+    git clone git://projects.vdr-developer.org/vdr-epg-daemon.git vdr-epg-daemon &&\
+    cd vdr-epg-daemon &&\
+    sed -i 's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config &&\
+    make
