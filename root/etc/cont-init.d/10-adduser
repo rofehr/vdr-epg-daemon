@@ -20,9 +20,6 @@ echo '
   https://projects.vdr-developer.org/projects/vdr-epg-daemon
 --------------------------------------------------------------'
 echo '
-To support LSIO projects visit:
-https://www.linuxserver.io/donate/
---------------------------------------------------------------
 GID/UID
 --------------------------------------------------------------'
 echo "
