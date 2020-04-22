@@ -63,21 +63,25 @@ RUN echo "**** install s6-overlay ****" && \
     rm -f /etc/localtime && \
     ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime && \
     echo "Europe/Berlin" > /etc/timezone && \
-    dpkg-reconfigure -f noninteractive tzdata && \
     locale-gen de_DE.UTF-8 && \
+    dpkg-reconfigure -f noninteractive tzdata && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
     mkdir -p /usr/lib/mysql/plugin && \
-    mkdir -p /config && \
     mkdir -p /epgd/cache && \
     mkdir -p /epgd/epgimages && mkdir -p /var/cache/vdr && \
     ln -s /epgd/epgimages /var/cache/vdr/epgimages  && \
     mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www && \
     ln -s /epgd/channellogos /var/epgd/www/channellogos && \
+    echo "**** create abc user ****" && \
+    groupmod -g 1000 users && \
+    useradd -u 911 -U -d /epgd -s /bin/false abc && \
+    usermod -G users abc && \
     echo "**** sendmail config ****" && \
     mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
+    usermod -G mail abc && \
     echo "**** compile ****" && \
     wget https://projects.vdr-developer.org/git/vdr-epg-daemon.git/snapshot/vdr-epg-daemon-1.1.159.tar.gz && \
     tar xzf vdr-epg-daemon-1.1.159.tar.gz && \
@@ -101,8 +105,8 @@ RUN echo "**** install s6-overlay ****" && \
       wget \
       *-dev && \
     apt-get purge -qy --auto-remove && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    if [ -e /usr/bin/python-config ]; then rm /usr/bin/python-config ; fi
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && rm -f /usr/bin/python-config
 
 # copy local files
 COPY root/ /

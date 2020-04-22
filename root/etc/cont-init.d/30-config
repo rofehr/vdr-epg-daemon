@@ -9,3 +9,7 @@ conf_dir="/epgd/config"
 # copy config
 [[ -d $conf_dir ]] && \
 	cp --no-clobber --recursive /defaults/config/. $conf_dir/
+
+# permissions
+chown -R abc:abc /epgd
+chmod 755 /usr/bin/svdrpsend

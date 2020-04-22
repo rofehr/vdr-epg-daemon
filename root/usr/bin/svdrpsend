@@ -1,0 +1,30 @@
+#!/bin/bash
+
+while [ $# != 0 ] ; do
+    case $1 in
+         -d) HOST=$2
+             shift 2
+             ;;
+         -p) PORT=$2
+             shift 2
+             ;;
+          *) ARGS=$ARGS" $1"
+             shift
+             ;;
+    esac
+done
+
+if [ "${#ARGS}" = 0 ] ; then
+    echo "Usage: $0 options command..."
+    echo "Options: -d hostname        destination hostname (default: localhost)"
+    echo "         -p port            SVDRP port number (default: 6419)"
+    exit
+fi
+
+# Your BASH have to be compiled with /dev/tcp/ support!
+exec 5<>/dev/tcp/${HOST:-localhost}/${PORT:-6419} || exit
+echo "$ARGS" >&5
+while read -t 1 i ; do
+    echo "$i"
+done <&5
+exec 5>&-
