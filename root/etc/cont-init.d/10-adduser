@@ -1,4 +1,3 @@
-
 #!/usr/bin/with-contenv bash
 
 PUID=${PUID:-911}
