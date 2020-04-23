@@ -87,10 +87,8 @@ RUN echo "**** install s6-overlay ****" && \
     cd vdr-epg-daemon* && \
     sed -i  's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
     sed -i  's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
-    sed -i  's/CURL_GLOBAL_NOTHING/CURL_GLOBAL_SSL/' ./lib/curl.c && cat ./lib/curl.c && \
     git clone https://github.com/3PO/epgd-plugin-tvm.git ./PLUGINS/tvm && \
     git clone https://github.com/chriszero/epgd-plugin-tvsp.git ./PLUGINS/tvsp && \
-    sed -i  's/CURL_GLOBAL_NOTHING/CURL_GLOBAL_SSL/' ./lib/curl.c && cat ./lib/curl.c && \
     make all install && \
     echo "**** get channellogos ****" && \
     cd /tmp && \
