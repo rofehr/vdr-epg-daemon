@@ -1,5 +1,8 @@
 #!/usr/bin/with-contenv bash
 
-export LANG="de_DE.UTF-8"
-exec \
-	s6-setuidgid abc /usr/local/bin/epghttpd -n -t -c /epgd/config
+if [ "$START_EPGHTTPD" = "yes" ]; then
+	echo "Starting epghttpd..."
+	export LANG="$LANG"
+	exec \
+		s6-setuidgid abc /usr/local/bin/epghttpd -n -t -c /epgd/config
+fi

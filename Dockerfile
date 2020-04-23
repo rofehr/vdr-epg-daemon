@@ -7,7 +7,8 @@ WORKDIR /tmp
 ENV DEBIAN_FRONTEND="noninteractive" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
-    LC_ALL="de_DE.UTF-8"
+    LC_ALL="de_DE.UTF-8" \
+    START_EPGHTTPD="yes"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/
 

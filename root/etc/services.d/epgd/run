@@ -1,5 +1,6 @@
 #!/usr/bin/with-contenv bash
 
-export LANG="de_DE.UTF-8"
+echo "Starting epgd..."
+export LANG="$LANG"
 exec \
 	s6-setuidgid abc /usr/local/bin/epgd -n -t -p /usr/local/lib/epgd/plugins -c /epgd/config
