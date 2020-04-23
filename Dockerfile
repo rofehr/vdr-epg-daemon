@@ -45,9 +45,7 @@ RUN echo "**** install s6-overlay ****" && \
       libarchive-dev \
       libcurl4-openssl-dev \
       libimlib2-dev \
-      libimlib2-dev \
       libjansson-dev \
-      libjpeg-dev \
       libjpeg-dev \
       libmariadbclient-dev \
       libmicrohttpd-dev \
@@ -83,8 +81,9 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
     usermod -G mail abc && \
     echo "**** compile ****" && \
-    wget https://projects.vdr-developer.org/git/vdr-epg-daemon.git/snapshot/vdr-epg-daemon-1.1.159.tar.gz && \
-    tar xzf vdr-epg-daemon-1.1.159.tar.gz && \
+    #wget https://projects.vdr-developer.org/git/vdr-epg-daemon.git/snapshot/vdr-epg-daemon-1.1.159.tar.gz && \
+    #tar xzf vdr-epg-daemon-1.1.159.tar.gz && \
+    git clone git://projects.vdr-developer.org/vdr-epg-daemon.git vdr-epg-daemon && \
     cd vdr-epg-daemon* && \
     sed -i  's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
     sed -i  's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
