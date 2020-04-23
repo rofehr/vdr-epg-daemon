@@ -101,7 +101,7 @@ RUN echo "**** install s6-overlay ****" && \
       build-essential \
       git \
       wget \
-      *-dev && \
+      '*-dev' && \
     apt-get purge -qy --auto-remove && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && rm -f /usr/bin/python-config
