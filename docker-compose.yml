@@ -1,0 +1,18 @@
+version: '2.4'
+services:
+  vdr-epg-daemon:
+    image: 'lapicidae/vdr-epg-daemon:bionic'
+    container_name: vdr-epg-daemon
+    volumes:
+      - './epgd/cache:/epgd/cache:rw'
+      - './epgd/channellogos:/epgd/channellogos:rw'
+      - './epgd/epgimages:/epgd/epgimages:rw'
+      - './epgd/config:/epgd/config:rw'
+    environment:
+      - PUID=666
+      - PGID=990
+      - START_EPGHTTPD=yes
+    network_mode: bridge
+    ports:
+      - '9999:9999'
+    restart: unless-stopped

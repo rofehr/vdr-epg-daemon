@@ -1,0 +1,35 @@
+version: '2.4'
+services:
+  db:
+    image: 'lapicidae/mariadb-epglv:latest'
+    container_name: mariadb-epglv
+    volumes:
+      - './MySQL:/var/lib/mysql:rw'
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - EPGD_RECOMMEND=yes
+      - TZ=Europe/Berlin
+    command: mysqld
+    entrypoint: /mariadb-epglv.sh
+    network_mode: bridge
+    ports:
+      - '3306:3306'
+    restart: unless-stopped
+  vdr-epg-daemon:
+    image: 'lapicidae/vdr-epg-daemon:bionic'
+    container_name: vdr-epg-daemon
+    depends_on:
+      - db
+    volumes:
+      - './epgd/cache:/epgd/cache:rw'
+      - './epgd/channellogos:/epgd/channellogos:rw'
+      - './epgd/epgimages:/epgd/epgimages:rw'
+      - './epgd/config:/epgd/config:rw'
+    environment:
+      - PUID=666
+      - PGID=990
+      - START_EPGHTTPD=yes
+    network_mode: bridge
+    ports:
+      - '9999:9999'
+    restart: unless-stopped
