@@ -26,7 +26,7 @@ RUN echo "**** install s6-overlay ****" && \
       libjpeg8 \
       libmariadb3 \
       libmicrohttpd12 \
-      libpython3.6 \
+      libpython3.8 \
       libxml2 \
       libxslt1.1 \
       locales \
