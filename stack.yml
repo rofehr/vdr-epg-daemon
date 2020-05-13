@@ -16,7 +16,7 @@ services:
       - '3306:3306'
     restart: unless-stopped
   vdr-epg-daemon:
-    image: 'lapicidae/vdr-epg-daemon:bionic'
+    image: 'lapicidae/vdr-epg-daemon:latest'
     container_name: vdr-epg-daemon
     depends_on:
       - db
