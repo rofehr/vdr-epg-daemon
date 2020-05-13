@@ -10,10 +10,10 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="de_DE.UTF-8" \
     START_EPGHTTPD="yes"
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v1.22.1.0/s6-overlay-amd64.tar.gz /tmp/
+ADD https://github.com/just-containers/s6-overlay/releases/download/v2.0.0.1/s6-overlay-amd64.tar.gz /tmp/
 
 RUN echo "**** install s6-overlay ****" && \
-    tar zxf /tmp/s6-overlay-amd64.tar.gz -C / && \
+    tar xzf /tmp/s6-overlay-amd64.tar.gz -C / --exclude='./bin' && tar xzf /tmp/s6-overlay-amd64.tar.gz -C /usr ./bin && \
     echo "**** install runtime packages ****" && \
     apt-get update -qq && \
     apt-get install -qy \
@@ -24,8 +24,7 @@ RUN echo "**** install s6-overlay ****" && \
       libimlib2 \
       libjansson4 \
       libjpeg8 \
-      libjpeg8 \
-      libmariadbclient18 \
+      libmariadb3 \
       libmicrohttpd12 \
       libpython3.6 \
       libxml2 \
@@ -48,6 +47,7 @@ RUN echo "**** install s6-overlay ****" && \
       libimlib2-dev \
       libjansson-dev \
       libjpeg-dev \
+      libmariadb-dev-compat \
       libmariadbclient-dev \
       libmicrohttpd-dev \
       libssl-dev \
@@ -82,8 +82,6 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
     usermod -G mail abc && \
     echo "**** compile ****" && \
-    #wget https://projects.vdr-developer.org/git/vdr-epg-daemon.git/snapshot/vdr-epg-daemon-1.1.159.tar.gz && \
-    #tar xzf vdr-epg-daemon-1.1.159.tar.gz && \
     git clone git://projects.vdr-developer.org/vdr-epg-daemon.git vdr-epg-daemon && \
     cd vdr-epg-daemon* && \
     sed -i  's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
