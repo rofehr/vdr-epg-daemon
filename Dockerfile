@@ -91,8 +91,9 @@ RUN echo "**** install s6-overlay ****" && \
     make all install && \
     echo "**** get channellogos ****" && \
     cd /tmp && \
-    wget https://github.com/FrodoVDR/channellogos/archive/master.tar.gz && \
-    tar xzf master.tar.gz && \
+    git pull https://github.com/lapicidae/svg-channellogos.git chlogo && \
+    chmod +x /chlogo/tools/install && \
+    /chlogo/tools/install -c dark -p /epgd/channellogos -r && \
     cp -r channellogos-master/logos-orig/* /defaults/channellogos/ && \
     echo "**** cleanup ****" && \
     apt-get remove -qy \
