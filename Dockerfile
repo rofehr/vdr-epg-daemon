@@ -91,7 +91,7 @@ RUN echo "**** install s6-overlay ****" && \
     make all install && \
     echo "**** get channellogos ****" && \
     cd /tmp && \
-    git pull https://github.com/lapicidae/svg-channellogos.git chlogo && \
+    git clone https://github.com/lapicidae/svg-channellogos.git chlogo && \
     chmod +x /chlogo/tools/install && \
     /chlogo/tools/install -c dark -p /epgd/channellogos -r && \
     cp -r channellogos-master/logos-orig/* /defaults/channellogos/ && \
