@@ -3,9 +3,11 @@
 conf_dir="/epgd/config"
 
 # make folder
-[[ ! -d $conf_dir ]] && \
-	mkdir -p $conf_dir
+if [ ! -d $conf_dir ]; then
+    mkdir -p $conf_dir
+fi
 
 # copy config
-[[ -d $conf_dir ]] && \
-	cp --no-clobber --recursive /defaults/config/. $conf_dir/
+if [ -d $conf_dir ]; then
+    cp --no-clobber --recursive /defaults/config/. $conf_dir/
+fi

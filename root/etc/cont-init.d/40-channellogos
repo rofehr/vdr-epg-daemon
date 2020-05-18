@@ -1,11 +1,11 @@
 #!/usr/bin/with-contenv bash
 
-conf_dir="/epgd/channellogos"
-
-# make folder
-[[ ! -d $conf_dir ]] && \
-	mkdir -p $conf_dir
+logo_dir="/epgd/channellogos"
 
 # copy logos if dir empty
-[[ -z "$(ls -A $conf_dir)" ]] && \
-	cp --no-clobber --recursive /defaults/channellogos/. $conf_dir/
+if [ -z "$(ls -A $logo_dir)" ]; then
+	cp --no-clobber --recursive /defaults/channellogos/. $logo_dir/
+	echo "YES"
+else
+	echo "NO"
+fi
