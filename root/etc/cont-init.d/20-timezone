@@ -1,0 +1,13 @@
+#!/usr/bin/with-contenv bash
+
+# set timezone
+if [ -d "/usr/share/zoneinfo/$TZ" ]; then
+	CURRENT_TZ=$(readlink /etc/localtime)
+	if [[ ! $CURRENT_TZ =~ $TZ ]]; then
+		unlink /etc/localtime
+		ln -s /usr/share/zoneinfo/$TZ /etc/localtime
+		echo $TZ >/etc/timezone
+		dpkg-reconfigure -f noninteractive tzdata
+		echo "New timezone $TZ set!"
+	fi
+fi 

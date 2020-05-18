@@ -8,7 +8,8 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
-    START_EPGHTTPD="yes"
+    START_EPGHTTPD="yes" \
+    TZ="Europe/Berlin"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.0.0.1/s6-overlay-amd64.tar.gz /tmp/
 
@@ -60,9 +61,9 @@ RUN echo "**** install s6-overlay ****" && \
     if [ ! -e /usr/bin/python-config ]; then ln -sf python3-config /usr/bin/python-config ; fi && \
     echo "**** timezone and locale ****" && \
     rm -f /etc/localtime && \
-    ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime && \
-    echo "Europe/Berlin" > /etc/timezone && \
-    locale-gen de_DE.UTF-8 && \
+    ln -s /usr/share/zoneinfo/$TZ /etc/localtime && \
+    echo $TZ > /etc/timezone && \
+    locale-gen $LANG && \
     dpkg-reconfigure -f noninteractive tzdata && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
