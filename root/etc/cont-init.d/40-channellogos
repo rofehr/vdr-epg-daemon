@@ -5,7 +5,9 @@ logo_dir="/epgd/channellogos"
 # copy logos if dir empty
 if [ -z "$(ls -A $logo_dir)" ]; then
 	cp --no-clobber --recursive /defaults/channellogos/. $logo_dir/
-	echo "YES"
-else
-	echo "NO"
+elif [ "$LOGO_RECREATE" = "yes" ]; then
+	if [ -d "$logo_dir" ]; then
+		rm -rf ${logo_dir}/{,.[!.],..?}*
+	fi
+	cp --recursive /defaults/channellogos/. $logo_dir/
 fi

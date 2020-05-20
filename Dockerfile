@@ -8,6 +8,7 @@ ENV DEBIAN_FRONTEND="noninteractive" \
     LANG="de_DE.UTF-8" \
     LANGUAGE="de_DE:de" \
     LC_ALL="de_DE.UTF-8" \
+    LOGO_RECREATE="yes" \
     START_EPGHTTPD="yes" \
     TZ="Europe/Berlin"
 
