@@ -95,7 +95,7 @@ RUN echo "**** install s6-overlay ****" && \
     cd /tmp && \
     git clone https://github.com/lapicidae/svg-channellogos.git chlogo && \
     chmod +x chlogo/tools/install && \
-    chlogo/tools/install -c dark -p /epgd/channellogos -r && \
+    chlogo/tools/install -c dark -p /defaults/channellogos -r && \
     echo "**** cleanup ****" && \
     apt-get remove -qy \
       build-essential \
