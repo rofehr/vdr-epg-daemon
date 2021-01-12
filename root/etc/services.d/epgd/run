@@ -3,4 +3,4 @@
 echo "Starting epgd..."
 export LANG="$LANG"
 exec \
-	s6-setuidgid abc /usr/local/bin/epgd -n -t -p /usr/local/lib/epgd/plugins -c /epgd/config
+	s6-setuidgid abc /usr/local/bin/epgd -n -p /usr/local/lib/epgd/plugins -c /epgd/config
