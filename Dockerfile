@@ -109,6 +109,8 @@ RUN echo "**** install s6-overlay ****" && \
 # copy local files
 COPY root/ /
 
+WORKDIR /epgd
+
 EXPOSE 9999
 
 VOLUME ["/epgd/cache", "/epgd/channellogos", "/epgd/config", "/epgd/epgimages"]
