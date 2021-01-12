@@ -14,6 +14,8 @@ ENV DEBIAN_FRONTEND="noninteractive" \
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.1.0.2/s6-overlay-amd64-installer /tmp/
 
+ADD https://github.com/just-containers/socklog-overlay/releases/download/v3.1.0-2/socklog-overlay-amd64.tar.gz /tmp/
+
 RUN echo "**** install s6-overlay ****" && \
     chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && \
     tar xzf /tmp/socklog-overlay-amd64.tar.gz -C / && \
