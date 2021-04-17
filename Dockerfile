@@ -87,7 +87,7 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
     usermod -G mail abc && \
     echo "**** compile ****" && \
-    git clone https://github.com/seahawk1986/vdr-epg-daemon && \
+    git clone https://github.com/seahawk1986/vdr-epg-daemon.git && \
     cd vdr-epg-daemon* && \
     sed -i  's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
     sed -i  's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
