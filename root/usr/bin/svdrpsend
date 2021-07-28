@@ -1,29 +1,55 @@
 #!/bin/bash
 
-while [ $# != 0 ] ; do
-    case $1 in
-         -d) HOST=$2
-             shift 2
-             ;;
-         -p) PORT=$2
-             shift 2
-             ;;
-          *) ARGS=$ARGS" $1"
-             shift
-             ;;
-    esac
+
+# Usage Message
+function usage {
+	echo -e "\n"
+	echo "############################## SVDRP send ##############################" 1>&2
+	if [ ! -z "${1}" ]; then
+		echo "ERROR: $1" 1>&2
+	fi
+	echo "Usage: $0 options command..." 1>&2
+	echo -e "Options:" 1>&2
+	echo -e "\t-d hostname\tdestination hostname or ip (default: localhost)" 1>&2
+	echo -e "\t-p port\t\tSVDRP port number (default: 6419)" 1>&2
+	echo "########################################################################" 1>&2
+	exit 1
+}
+
+
+### check Parameters
+while getopts "d:p:h" o; do
+	case "${o}" in
+		d)
+			HOST=${OPTARG}
+			;;
+		p)
+			PORT=${OPTARG}
+			;;
+		h)
+			usage
+			;;
+	esac
 done
 
-if [ "${#ARGS}" = 0 ] ; then
-    echo "Usage: $0 options command..."
-    echo "Options: -d hostname        destination hostname (default: localhost)"
-    echo "         -p port            SVDRP port number (default: 6419)"
-    exit
+
+## get the rest
+shift $((OPTIND-1))
+declare -a ARGS=()
+while test $# -gt 0; do
+  ARGS+=("$1")
+  shift
+done
+
+if [ ! ${array[@]} ]; then
+    ARGS+=("HELP")
 fi
 
+
 # Your BASH have to be compiled with /dev/tcp/ support!
-exec 5<>/dev/tcp/${HOST:-localhost}/${PORT:-6419} || exit
-echo "$ARGS" >&5
+exec 5<>/dev/tcp/${HOST:-localhost}/${PORT:-6419} || usage
+
+echo ${ARGS[*]} >&5
 while read -t 1 i ; do
     echo "$i"
 done <&5
