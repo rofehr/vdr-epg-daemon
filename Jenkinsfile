@@ -1,3 +1,8 @@
+//
+// Plugin "build user vars" is needed!
+// Set "Manage Jenkins -> Configure System -> Global properties" "DEFAULT_EMAIL" Environment variable!
+//
+
 pipeline {
 	environment {
 		registry = "lapicidae/vdr-epg-daemon"
@@ -7,6 +12,7 @@ pipeline {
 		currTime = sh(returnStdout: true, script: 'date +"%H:%M"').trim()
 		currDate = sh(returnStdout: true, script: 'date +"%m.%d.%Y"').trim()
 		dockerImage = ''
+		email = ''
 	}
 	agent any
 	stages {
@@ -17,6 +23,9 @@ pipeline {
 					user = wrap([$class: 'BuildUser']) { return env.BUILD_USER }
 					user_id = wrap([$class: 'BuildUser']) { return env.BUILD_USER_ID }
 					email = wrap([$class: 'BuildUser']) { return env.BUILD_USER_EMAIL }
+					if (!email?.trim()) {
+						email = "${DEFAULT_EMAIL}"
+					}
 				}
 				echo "--- User Info ---"
 				echo "User:\t\t$user"
