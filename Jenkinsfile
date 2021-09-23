@@ -1,6 +1,6 @@
 //
 // Plugin "build user vars" is needed!
-// Set "Manage Jenkins -> Configure System -> Global properties" "DEFAULT_EMAIL" Environment variable!
+// Set "Manage Jenkins -> Configure System -> Global properties" "DEFAULT_EMAIL" Environment variable for users without email address!
 //
 
 pipeline {
@@ -75,7 +75,7 @@ pipeline {
 			  subject: "Pipeline: ${currentBuild.fullDisplayName} -> ${currentBuild.result}",
 			  charset: 'UTF-8',
 			  mimeType: 'text/html',
-			  body: "<b>${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - <em>${currentBuild.result}</em></b><br/><br/>Job started by user ${user_id} (${user}) at ${currTime} on ${currDate}.<br/>Check console <a href='${env.BUILD_URL}console'>output</a> to view full results.<br/><br/>Your faithful employee<br/><em>Node</em> ${env.NODE_NAME}"
+			  body: "<b>${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - <em>${currentBuild.result}</em></b><br/><br/>Job started by user ${user_id} (${user}) at ${currTime} on ${currDate}.<br/>Build took ${currentBuild.durationString}.<br/><br/>Check console <a href='${env.BUILD_URL}console'>output</a> to view full results.<br/><br/>Your faithful employee<br/><em>Node</em> ${env.NODE_NAME}"
 		}
 	}
 }
