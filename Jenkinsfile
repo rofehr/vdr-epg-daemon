@@ -40,12 +40,7 @@ pipeline {
 						email = "${DEFAULT_EMAIL}"
 					}
 				}
-				echo "--- User Info ---"
-				echo "User:\t\t$user"
-				echo "User ID:\t$user_id"
-				echo "eMail:\t\t$email"
-				echo "Time:\t\t$currTime"
-				echo "Date:\t\t$currDate"
+				echo "--- User Info ---\nUser:\t\t$user\nUser ID:\t$user_id\neMail:\t\t$email\nTime:\t\t$currTime\nDate:\t\t$currDate"
 			}
 		}
 		stage('Clone') {
