@@ -1,7 +1,7 @@
 #!/usr/bin/with-contenv bash
 
 if [ "$START_EPGHTTPD" = "yes" ]; then
-	echo "Starting epghttpd..."
+	s6-echo "Starting epghttpd..."
 	exec \
 		s6-setuidgid abc /usr/local/bin/epghttpd -n -c /epgd/config
 fi

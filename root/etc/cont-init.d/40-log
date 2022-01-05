@@ -1,0 +1,33 @@
+#!/usr/bin/with-contenv bash
+
+log_dir="/epgd/log"
+rules_dir="/etc/socklog.rules"
+
+
+# search for socklog control files
+if [ -f "$rules_dir/epgd" ] && [ -f "$rules_dir/epghttpd" ]; then
+	cfile_exists="true"
+else
+	cfile_exists="false"
+fi
+
+
+# make folder
+if [ ! -d "$log_dir" ]; then
+    mkdir -p "$log_dir"
+fi
+
+
+if [ "$LOG2FILES" = "true" ]; then
+	if [ "$cfile_exists" = "false" ]; then
+		echo "Enable: Log to file ($log_dir/*)"
+		echo -e "-\n+.*epgd*\w:\n$log_dir/epgd" > "$rules_dir/epgd"
+		echo -e "-\n+epghttpd*\w:\n-ttpd*\w:.->.404\n$log_dir/epghttpd" > "$rules_dir/epghttpd"
+	fi
+else
+	if [ "$cfile_exists" = "true" ]; then
+		echo "Disable: Log to file (Log files in '$log_dir/*' will not be deleted\!)"
+		rm -rf "$rules_dir/epgd"
+		rm -rf "$rules_dir/epghttpd"
+	fi
+fi

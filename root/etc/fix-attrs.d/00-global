@@ -1,3 +1,0 @@
-/defaults true abc 0664 0755
-/epgd true abc 0664 0755
-/usr/bin/svdrpsend false root 0755

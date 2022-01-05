@@ -72,6 +72,7 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/epgimages /var/cache/vdr/epgimages  && \
     mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www && \
     ln -s /epgd/channellogos /var/epgd/www/channellogos && \
+    mkdir -p /epgd/log && \
     echo "**** create abc user ****" && \
     groupmod -g 1000 users && \
     useradd -u 911 -U -d /epgd -s /bin/false abc && \
