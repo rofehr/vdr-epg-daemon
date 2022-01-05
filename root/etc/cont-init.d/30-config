@@ -3,11 +3,19 @@
 conf_dir="/epgd/config"
 
 # make folder
-if [ ! -d $conf_dir ]; then
-    mkdir -p $conf_dir
+if [ ! -d "$conf_dir" ]; then
+    mkdir -p "$conf_dir"
 fi
 
 # copy config
-if [ -d $conf_dir ]; then
-    cp --no-clobber --recursive /defaults/config/. $conf_dir/
+if [ -d "$conf_dir" ]; then
+    cp --no-clobber --recursive /defaults/config/. "$conf_dir/"
+fi
+
+# eMail config (msmtp)
+msmtp_conf="/etc/msmtprc"
+if [ -f "$conf_dir/eMail.conf" ]; then
+	cp -f "$conf_dir/eMail.conf" "$msmtp_conf"
+	chown root:root "$msmtp_conf"
+	chmod 640 "$msmtp_conf"
 fi

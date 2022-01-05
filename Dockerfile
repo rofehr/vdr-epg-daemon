@@ -86,9 +86,10 @@ RUN echo "**** install s6-overlay ****" && \
     chown -R abc:abc /defaults && \
     chown -R abc:abc /epgd && \
     chown -R nobody:nogroup /epgd/log && \
-    echo "**** sendmail config ****" && \
-    mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak && \
-    ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
+    echo "**** SMTP client ****" && \
+    apt-get install -qy msmtp-mta && \
+    curl -o /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
+    chmod 640 /etc/msmtprc && \
     usermod -G mail abc && \
     echo "**** compile ****" && \
     cd /tmp && \
