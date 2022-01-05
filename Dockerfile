@@ -67,7 +67,6 @@ RUN echo "**** install s6-overlay ****" && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
-    mkdir -p /usr/lib/mysql/plugin && \
     mkdir -p /epgd/cache && \
     mkdir -p /epgd/epgimages && mkdir -p /var/cache/vdr && \
     ln -s /epgd/epgimages /var/cache/vdr/epgimages  && \
