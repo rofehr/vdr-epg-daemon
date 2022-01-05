@@ -4,13 +4,12 @@ LABEL maintainer="lapicidae"
 
 WORKDIR /tmp
 
-ENV DEBIAN_FRONTEND="noninteractive" \
-    LANG="de_DE.UTF-8" \
-    LANGUAGE="de_DE:de" \
-    LC_ALL="de_DE.UTF-8" \
-    LOGO_RECREATE="yes" \
-    START_EPGHTTPD="yes" \
-    TZ="Europe/Berlin"
+ENV LOGO_RECREATE="yes" \
+    START_EPGHTTPD="yes"
+
+ARG DEBIAN_FRONTEND="noninteractive" \
+    LANG="en_US.UTF-8" \
+    LC_ALL="C"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/
 
@@ -42,7 +41,7 @@ RUN echo "**** install s6-overlay ****" && \
       uuid \
       wget \
       zlib1g && \
-    if [ ! -e /usr/bin/python ]; then ln -sf python3 /usr/bin/python ; fi && \
+    if [ ! -e /usr/bin/python ]; then ln -sf $(which python3) /usr/bin/python ; fi && \
     echo "**** install build packages ****" && \
     apt-get install -qy \
       build-essential \
@@ -52,7 +51,6 @@ RUN echo "**** install s6-overlay ****" && \
       libimlib2-dev \
       libjansson-dev \
       libjpeg-dev \
-      libmariadb-dev-compat \
       libmariadbclient-dev \
       libmicrohttpd-dev \
       libssl-dev \
@@ -62,13 +60,10 @@ RUN echo "**** install s6-overlay ****" && \
       python3-dev \
       uuid-dev \
       zlib1g-dev && \
-    if [ ! -e /usr/bin/python-config ]; then ln -sf python3-config /usr/bin/python-config ; fi && \
-    echo "**** timezone and locale ****" && \
-    rm -f /etc/localtime && \
-    ln -s /usr/share/zoneinfo/$TZ /etc/localtime && \
-    echo $TZ > /etc/timezone && \
+    if [ ! -e /usr/bin/python-config ]; then ln -sf $(which python3-config) /usr/bin/python-config ; fi && \
+    echo "**** locale ****" && \
+    localedef -i $(echo "$LANG" | cut -d "." -f 1) -c -f $(echo "$LANG" | cut -d "." -f 2) -A /usr/share/locale/locale.alias $LANG && \
     locale-gen $LANG && \
-    dpkg-reconfigure -f noninteractive tzdata && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
@@ -87,8 +82,9 @@ RUN echo "**** install s6-overlay ****" && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
     usermod -G mail abc && \
     echo "**** compile ****" && \
-    git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git && \
-    cd vdr-epg-daemon* && \
+    cd /tmp && \
+    git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
+    cd vdr-epg-daemon && \
     sed -i  's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
     sed -i  's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
     git clone https://github.com/3PO/epgd-plugin-tvm.git ./PLUGINS/tvm && \
@@ -100,14 +96,16 @@ RUN echo "**** install s6-overlay ****" && \
     chmod +x chlogo/tools/install && \
     chlogo/tools/install -c dark -p /defaults/channellogos -r && \
     echo "**** cleanup ****" && \
-    apt-get remove -qy \
+    apt-get purge -qy --auto-remove \
       build-essential \
       git \
       wget \
       '*-dev' && \
-    apt-get purge -qy --auto-remove && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && rm -f /usr/bin/python-config
+    rm -rf /var/lib/apt/lists/* \
+      /tmp/* \
+      /var/tmp/* \
+      /usr/bin/python-config
 
 # copy local files
 COPY root/ /

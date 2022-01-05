@@ -2,7 +2,6 @@
 
 if [ "$START_EPGHTTPD" = "yes" ]; then
 	echo "Starting epghttpd..."
-	export LANG="$LANG"
 	exec \
-		s6-setuidgid abc /usr/local/bin/epghttpd -n -t -c /epgd/config
+		s6-setuidgid abc /usr/local/bin/epghttpd -n -c /epgd/config
 fi
