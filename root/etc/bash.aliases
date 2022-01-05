@@ -1,0 +1,4 @@
+# /etc/bash.aliases
+
+alias tailf='tail -f'
+alias la='ls -lah --color=auto'

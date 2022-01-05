@@ -1,0 +1,34 @@
+#!/usr/bin/with-contenv bash
+
+
+## set missing locale env
+if [ ! -z "$LANG" ];then
+	if [ -z "$LANGUAGE" ]; then
+		export LANGUAGE="$(echo "$LANG" | cut -d "." -f 1):$(echo "$LANG" | cut -d "_" -f 1)"
+		printf "%s" "${LANGUAGE}" > /var/run/s6/container_environment/LANGUAGE
+		echo "LANGUAGE variable not found, setting generated one: $LANGUAGE"
+	fi
+
+	if [ -z "$LC_ALL" ]; then
+		export LC_ALL="C"
+		printf "%s" "${LC_ALL}" > /var/run/s6/container_environment/LC_ALL
+		echo "LC_ALL variable not found, setting: $LC_ALL"
+	fi
+fi
+
+
+## set timezone
+if [ ! -z "$TZ" ]; then
+	if [ -f "/usr/share/zoneinfo/$TZ" ]; then
+		CURRENT_TZ=$(readlink /etc/localtime)
+		if [[ ! $CURRENT_TZ =~ $TZ ]]; then
+			unlink /etc/localtime
+			ln -s /usr/share/zoneinfo/$TZ /etc/localtime
+			echo $TZ >/etc/timezone
+			dpkg-reconfigure -f noninteractive tzdata
+			echo "Timezone set to: $TZ"
+		fi
+	elif [ ! -f "/usr/share/zoneinfo/$TZ" ]; then
+		echo "Cannot set timezone: $TZ"
+	fi
+fi
