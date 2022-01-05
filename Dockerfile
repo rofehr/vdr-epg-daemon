@@ -70,9 +70,8 @@ RUN echo "**** install s6-overlay ****" && \
     echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
     rm -rf /root/.bashrc && \
     echo "**** create abc user ****" && \
-    groupmod -g 1000 users && \
     useradd -u 911 -U -d /epgd -s /bin/false abc && \
-    usermod -G users abc && \
+    usermod -a -G users abc && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
@@ -88,9 +87,9 @@ RUN echo "**** install s6-overlay ****" && \
     chown -R nobody:nogroup /epgd/log && \
     echo "**** SMTP client ****" && \
     apt-get install -qy msmtp-mta && \
-    curl -o /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
+    wget -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
     chmod 640 /etc/msmtprc && \
-    usermod -G mail abc && \
+    usermod -a -G mail abc && \
     echo "**** compile ****" && \
     cd /tmp && \
     git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
