@@ -4,6 +4,8 @@ LABEL maintainer="lapicidae"
 
 WORKDIR /tmp
 
+COPY root/ /
+
 ENV LANG="de_DE.UTF-8"
 
 ARG DEBIAN_FRONTEND="noninteractive" \
@@ -67,6 +69,10 @@ RUN echo "**** install s6-overlay ****" && \
     echo "[ -r /usr/bin/contenv2env ] && . /usr/bin/contenv2env" >> /etc/bash.bashrc && \
     echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
     rm -rf /root/.bashrc && \
+    echo "**** create abc user ****" && \
+    groupmod -g 1000 users && \
+    useradd -u 911 -U -d /epgd -s /bin/false abc && \
+    usermod -G users abc && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
@@ -76,10 +82,10 @@ RUN echo "**** install s6-overlay ****" && \
     mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www && \
     ln -s /epgd/channellogos /var/epgd/www/channellogos && \
     mkdir -p /epgd/log && \
-    echo "**** create abc user ****" && \
-    groupmod -g 1000 users && \
-    useradd -u 911 -U -d /epgd -s /bin/false abc && \
-    usermod -G users abc && \
+    echo "**** change permissions ****" && \
+    chown -R abc:abc /defaults && \
+    chown -R abc:abc /epgd && \
+    chown -R nobody:nogroup /epgd/log && \
     echo "**** sendmail config ****" && \
     mv /etc/ssmtp/ssmtp.conf /etc/ssmtp/ssmtp.conf.bak && \
     ln -s /epgd/config/eMail.conf /etc/ssmtp/ssmtp.conf && \
@@ -109,9 +115,6 @@ RUN echo "**** install s6-overlay ****" && \
       /tmp/* \
       /var/tmp/* \
       /usr/bin/python-config
-
-# copy local files
-COPY root/ /
 
 WORKDIR /epgd
 

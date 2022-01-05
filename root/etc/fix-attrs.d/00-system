@@ -1,2 +1,2 @@
 /usr/bin/svdrpsend false root 0755 0755
-/defaults true abc 0664 0755
+/defaults true abc:abc 0664 0755
