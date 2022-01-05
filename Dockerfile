@@ -20,6 +20,7 @@ RUN echo "**** install s6-overlay ****" && \
     tar xzf /tmp/socklog-overlay-amd64.tar.gz -C / && \
     echo "**** install runtime packages ****" && \
     apt-get update -qq && \
+    apt-get upgrade -qy && \
     apt-get install -qy \
       bsd-mailx \
       libarchive13 \
