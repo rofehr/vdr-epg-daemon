@@ -20,7 +20,7 @@ if [ "$LOG2FILE" = "true" ] && [ "$cfile_exists" != "true" ]; then
 	echo "Enable: Log to file ($log_dir/*)"
 	echo -e "-\n+.*epgd*\w:\n$log_dir/epgd" > "$rules_dir/epgd"
 	echo -e "-\n+epghttpd*\w:\n-ttpd*\w:.->.404\n$log_dir/epghttpd" > "$rules_dir/epghttpd"
-else
+elif [ "$cfile_exists" = "true" ]; then
 	echo "Disable: Log to file (Log files in '$log_dir/*' will not be deleted\!)"
 	rm -rf "$rules_dir/epgd"
 	rm -rf "$rules_dir/epghttpd"
