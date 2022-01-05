@@ -71,7 +71,7 @@ RUN echo "**** install s6-overlay ****" && \
     echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
     rm -rf /root/.bashrc && \
     echo "**** create abc user ****" && \
-    useradd -u 911 -U -d /epgd -s /bin/false abc && \
+    useradd --system --no-create-home --shell /bin/false abc && \
     usermod -a -G users abc && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
