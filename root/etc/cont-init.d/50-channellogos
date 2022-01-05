@@ -1,13 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+logo_cp_done="/.logo_cp_done"
 logo_dir="/epgd/channellogos"
 
-# copy logos if dir empty
-if [ -z "$(ls -A $logo_dir)" ]; then
-	cp --no-clobber --recursive /defaults/channellogos/. $logo_dir/
-elif [ "$LOGO_RECREATE" = "yes" ]; then
-	if [ -d "$logo_dir" ]; then
-		rm -rf ${logo_dir}/{,.[!.],..?}*
-	fi
-	cp --recursive /defaults/channellogos/. $logo_dir/
+if [ ! -e "$logo_cp_done" ] && [ "$LOGO_COPY" != "false" ]; then
+	echo "Copying new Channellogos to: $logo_dir"
+	cp --no-clobber --recursive "/defaults/channellogos/." "$logo_dir/"
+	touch "$logo_cp_done"
 fi

@@ -18,7 +18,7 @@ if [ ! -d "$log_dir" ]; then
 fi
 
 
-if [ "$LOG2FILES" = "true" ]; then
+if [ "$LOG2FILE" = "true" ]; then
 	if [ "$cfile_exists" = "false" ]; then
 		echo "Enable: Log to file ($log_dir/*)"
 		echo -e "-\n+.*epgd*\w:\n$log_dir/epgd" > "$rules_dir/epgd"

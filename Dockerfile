@@ -4,11 +4,9 @@ LABEL maintainer="lapicidae"
 
 WORKDIR /tmp
 
-ENV LOGO_RECREATE="yes" \
-    START_EPGHTTPD="yes"
+ENV LANG="de_DE.UTF-8"
 
 ARG DEBIAN_FRONTEND="noninteractive" \
-    LANG="en_US.UTF-8" \
     LC_ALL="C"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/
@@ -114,6 +112,6 @@ WORKDIR /epgd
 
 EXPOSE 9999
 
-VOLUME ["/epgd/cache", "/epgd/channellogos", "/epgd/config", "/epgd/epgimages"]
+VOLUME ["/epgd/cache", "/epgd/config", "/epgd/epgimages"]
 
 ENTRYPOINT ["/init"]
