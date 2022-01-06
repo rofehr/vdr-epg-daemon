@@ -1,2 +1,2 @@
+/usr/bin/contenv2env false root 0755 0755
 /usr/bin/svdrpsend false root 0755 0755
-/defaults true abc:abc 0644 0755
