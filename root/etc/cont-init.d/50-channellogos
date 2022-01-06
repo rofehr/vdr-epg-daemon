@@ -1,10 +1,10 @@
 #!/usr/bin/with-contenv bash
 
-logo_cp_done="/.logo_cp_done"
+logo_ext_done="/.logo_ext_done"
 logo_dir="/epgd/channellogos"
 
-if [ ! -e "$logo_cp_done" ] && [ "$LOGO_COPY" != "false" ]; then
-	echo "Copying new Channellogos to: $logo_dir"
-	cp --no-clobber --recursive "/defaults/channellogos/." "$logo_dir/"
-	touch "$logo_cp_done"
+if [ ! -e "$logo_ext_done" ] && [ "$LOGO_COPY" != "false" ]; then
+	echo "Extract new channellogos: $logo_dir"
+	tar xf "/defaults/channellogos.tar.xz" --owner=abc --group=abc --skip-old-files -C "$logo_dir"
+	touch "$logo_ext_done"
 fi

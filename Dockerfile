@@ -82,10 +82,6 @@ RUN echo "**** install s6-overlay ****" && \
     mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www && \
     ln -s /epgd/channellogos /var/epgd/www/channellogos && \
     mkdir -p /epgd/log && \
-    echo "**** change permissions ****" && \
-    chown -R abc:abc /defaults && \
-    chown -R abc:abc /epgd && \
-    chown -R nobody:nogroup /epgd/log && \
     echo "**** SMTP client ****" && \
     apt-get install -qy msmtp-mta && \
     wget -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
@@ -104,7 +100,12 @@ RUN echo "**** install s6-overlay ****" && \
     cd /tmp && \
     git clone https://github.com/lapicidae/svg-channellogos.git chlogo && \
     chmod +x chlogo/tools/install && \
-    chlogo/tools/install -c dark -p /defaults/channellogos -r && \
+    chlogo/tools/install -c dark -p /tmp/channellogos -r && \
+    tar -cpJf /defaults/channellogos.tar.xz -C /tmp/channellogos . &&\
+    echo "**** change permissions ****" && \
+    chown -R abc:abc /defaults && \
+    chown -R abc:abc /epgd && \
+    chown -R nobody:nogroup /epgd/log && \
     echo "**** cleanup ****" && \
     apt-get purge -qy --auto-remove \
       build-essential \
