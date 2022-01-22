@@ -1,7 +1,7 @@
 [![epgd](epgd-logo.svg)](https://projects.vdr-developer.org/git/vdr-epg-daemon.git)
 
 epgd - a EPG daemon which fetches the EPG and additional data from various sources (like epgdata, eplists.constabel.net, ...) and provide it to the [epg2vdr](https://projects.vdr-developer.org/git/vdr-plugin-epg2vdr.git) plugin via a database (MariaDB or MySQL).  
-The epgd obtains the EPG from the sources by plugins. A plugin for [epgData](https://www.epgdata.com) is contained.  
+The epgd obtains the EPG from the sources by plugins. A plugin for [epgData](https://www.epgdata.com), [tvm](https://github.com/3PO/epgd-plugin-tvm/) and [tvsp](https://github.com/chriszero/epgd-plugin-tvsp) is contained.  
 It is designed to handle large amount of data and pictures in a distributed environment with one epg-server and many possible vdr-clients.
 
 
@@ -126,7 +126,7 @@ In this instance `PUID=1234` and `PGID=4321`, to find yours use `id user` as bel
 
 ## Thanks
 
-* **[horchi](https://github.com/horchi)**
+* **[VDR EPG Daemon Team](https://projects.vdr-developer.org/projects/vdr-epg-daemon)**
 * **[Klaus Schmidinger (kls)](http://www.tvdr.de/)**
 * **[vdr-portal.de](https://www.vdr-portal.de/)**
 * **[just-containers](https://github.com/just-containers)**
