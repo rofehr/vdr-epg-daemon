@@ -2,23 +2,20 @@ FROM ubuntu:latest
 
 LABEL maintainer="lapicidae"
 
-WORKDIR /tmp
-
 COPY root/ /
 
 ENV LANG="de_DE.UTF-8"
 
 ARG DEBIAN_FRONTEND="noninteractive" \
-    LC_ALL="C"
+    LC_ALL="C" \
+    S6VER="2.2.0.3" \
+    SOCKVER="3.1.2-0"
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v2.2.0.3/s6-overlay-amd64-installer /tmp/
+ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-amd64-installer /tmp/
 
-ADD https://github.com/just-containers/socklog-overlay/releases/download/v3.1.2-0/socklog-overlay-amd64.tar.gz /tmp/
+ADD https://github.com/just-containers/socklog-overlay/releases/download/v$SOCKVER/socklog-overlay-amd64.tar.gz /tmp
 
-RUN echo "**** install s6-overlay ****" && \
-    chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && \
-    tar xzf /tmp/socklog-overlay-amd64.tar.gz -C / && \
-    echo "**** install runtime packages ****" && \
+RUN echo "**** install runtime packages ****" && \
     apt-get update -qq && \
     apt-get upgrade -qy && \
     apt-get install -qy \
@@ -35,6 +32,7 @@ RUN echo "**** install s6-overlay ****" && \
       libxml2 \
       libxslt1.1 \
       locales \
+      passwd \
       python3 \
       ssmtp \
       tzdata \
@@ -62,6 +60,9 @@ RUN echo "**** install s6-overlay ****" && \
       uuid-dev \
       zlib1g-dev && \
     if [ ! -e /usr/bin/python-config ]; then ln -sf $(which python3-config) /usr/bin/python-config ; fi && \
+    echo "**** s6-overlay ($S6VER) & socklog-overlay ($SOCKVER) ****" && \
+    chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && \
+    tar xzf /tmp/socklog-overlay-amd64.tar.gz -C / && \
     echo "**** locale ****" && \
     localedef -i $(echo "$LANG" | cut -d "." -f 1) -c -f $(echo "$LANG" | cut -d "." -f 2) -A /usr/share/locale/locale.alias $LANG && \
     locale-gen $LANG && \
@@ -84,7 +85,7 @@ RUN echo "**** install s6-overlay ****" && \
     mkdir -p /epgd/log && \
     echo "**** SMTP client ****" && \
     apt-get install -qy msmtp-mta && \
-    wget -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
+    wget --quiet -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
     chmod 640 /etc/msmtprc && \
     usermod -a -G mail abc && \
     echo "**** compile ****" && \
