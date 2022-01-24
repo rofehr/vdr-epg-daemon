@@ -5,6 +5,6 @@ logo_dir="/epgd/channellogos"
 
 if [ ! -e "$logo_ext_done" ] && [ "$LOGO_COPY" != "false" ]; then
 	echo "Extract new channellogos: $logo_dir"
-	tar xf "/defaults/channellogos.tar.xz" --owner=abc --group=abc --skip-old-files -C "$logo_dir"
+	tar xf "/defaults/channellogos.tar.xz" --owner=epgd --group=epgd --skip-old-files -C "$logo_dir"
 	touch "$logo_ext_done"
 fi

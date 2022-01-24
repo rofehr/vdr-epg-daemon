@@ -71,9 +71,9 @@ RUN echo "**** install runtime packages ****" && \
     echo "[ -r /usr/bin/contenv2env ] && . /usr/bin/contenv2env" >> /etc/bash.bashrc && \
     echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
     rm -rf /root/.bashrc && \
-    echo "**** create abc user ****" && \
-    useradd --system --no-create-home --shell /bin/false abc && \
-    usermod -a -G users abc && \
+    echo "**** create epgd user ****" && \
+    useradd --system --no-create-home --shell /bin/false epgd && \
+    usermod -a -G users epgd && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
     mkdir -p /defaults/config && \
@@ -87,7 +87,7 @@ RUN echo "**** install runtime packages ****" && \
     apt-get install -qy msmtp-mta && \
     wget --quiet -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
     chmod 640 /etc/msmtprc && \
-    usermod -a -G mail abc && \
+    usermod -a -G mail epgd && \
     echo "**** compile ****" && \
     cd /tmp && \
     git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
@@ -104,8 +104,8 @@ RUN echo "**** install runtime packages ****" && \
     chlogo/tools/install -c dark -p /tmp/channellogos -r && \
     tar -cpJf /defaults/channellogos.tar.xz -C /tmp/channellogos . &&\
     echo "**** change permissions ****" && \
-    chown -R abc:abc /defaults && \
-    chown -R abc:abc /epgd && \
+    chown -R epgd:epgd /defaults && \
+    chown -R epgd:epgd /epgd && \
     chown -R nobody:nogroup /epgd/log && \
     echo "**** cleanup ****" && \
     apt-get purge -qy --auto-remove \

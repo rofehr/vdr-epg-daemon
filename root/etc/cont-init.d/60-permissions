@@ -14,7 +14,7 @@ declare -a chmown=("/defaults"
 for f in "${chmown[@]}"
 do
 	echo "Reassign permissions: $f"
-	chown -R abc:abc "$f"
+	chown -R epgd:epgd "$f"
 	find "$f" -type d -exec chmod 775 {} \;
 	find "$f" -type f -exec chmod 664 {} \;
 done

@@ -3,5 +3,5 @@
 if [ "$START_EPGHTTPD" != "false" ]; then
 	s6-echo "Starting epghttpd..."
 	exec \
-		s6-setuidgid abc /usr/local/bin/epghttpd -n -c /epgd/config
+		s6-setuidgid epgd /usr/local/bin/epghttpd -n -c /epgd/config
 fi
