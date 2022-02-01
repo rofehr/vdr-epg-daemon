@@ -4,16 +4,16 @@ LABEL maintainer="lapicidae"
 
 COPY root/ /
 
-ENV LANG="de_DE.UTF-8"
-
 ARG DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="C" \
-    S6VER="2.2.0.3" \
-    SOCKVER="3.1.2-0"
+    S6VER="3.0.0.2"
 
-ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-amd64-installer /tmp/
+ENV PATH="$PATH:/command"
+ENV LANG="de_DE.UTF-8"
 
-ADD https://github.com/just-containers/socklog-overlay/releases/download/v$SOCKVER/socklog-overlay-amd64.tar.gz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-noarch-$S6VER.tar.xz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-x86_64-$S6VER.tar.xz /tmp
+ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/syslogd-overlay-noarch-$S6VER.tar.xz /tmp
 
 RUN echo "**** install runtime packages ****" && \
     apt-get update -qq && \
@@ -58,11 +58,20 @@ RUN echo "**** install runtime packages ****" && \
       libxslt1-dev \
       python3-dev \
       uuid-dev \
+      xz-utils \
       zlib1g-dev && \
     if [ ! -e /usr/bin/python-config ]; then ln -sf $(which python3-config) /usr/bin/python-config ; fi && \
-    echo "**** s6-overlay ($S6VER) & socklog-overlay ($SOCKVER) ****" && \
-    chmod +x /tmp/s6-overlay-amd64-installer && /tmp/s6-overlay-amd64-installer / && \
-    tar xzf /tmp/socklog-overlay-amd64.tar.gz -C / && \
+    echo "**** s6-overlay ($S6VER) ****" && \
+    cd /tmp && \
+    tar -C / -Jxpf /tmp/s6-overlay-noarch-$S6VER.tar.xz && \
+    tar -C / -Jxpf /tmp/s6-overlay-x86_64-$S6VER.tar.xz && \
+    sed -ie "s/$/:\/usr\/sbin/" /etc/s6-overlay/config/global_path && \
+    echo "**** syslogd-overlay ($S6VER) ****" && \
+    tar -C / -Jxpf /tmp/syslogd-overlay-noarch-$S6VER.tar.xz && \
+    touch /etc/s6-overlay/s6-rc.d/syslogd-prepare/dependencies.d/init && \
+    patch /etc/s6-overlay/s6-rc.d/syslogd-log/run /build/syslogd-log_run.patch && \
+    useradd --system --no-create-home --shell /bin/false syslog && \
+    useradd --system --no-create-home --shell /bin/false sysllog && \
     echo "**** locale ****" && \
     localedef -i $(echo "$LANG" | cut -d "." -f 1) -c -f $(echo "$LANG" | cut -d "." -f 2) -A /usr/share/locale/locale.alias $LANG && \
     locale-gen $LANG && \
@@ -72,7 +81,7 @@ RUN echo "**** install runtime packages ****" && \
     echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
     rm -rf /root/.bashrc && \
     echo "**** create epgd user ****" && \
-    useradd --system --no-create-home --shell /bin/false epgd && \
+    useradd --uid 911 --system --no-create-home --shell /bin/false epgd && \
     usermod -a -G users epgd && \
     echo "**** folders and symlinks ****" && \
     mkdir -p /defaults/channellogos && \
@@ -106,7 +115,11 @@ RUN echo "**** install runtime packages ****" && \
     echo "**** change permissions ****" && \
     chown -R epgd:epgd /defaults && \
     chown -R epgd:epgd /epgd && \
-    chown -R nobody:nogroup /epgd/log && \
+    chown -R sysllog:sysllog /epgd/log && \
+    chown root:root /usr/bin/contenv2env && \
+    chmod 755 /usr/bin/contenv2env && \
+    chown root:root /usr/bin/svdrpsend && \
+    chmod 755 /usr/bin/svdrpsend && \
     echo "**** cleanup ****" && \
     apt-get purge -qy --auto-remove \
       build-essential \
@@ -114,7 +127,9 @@ RUN echo "**** install runtime packages ****" && \
       wget \
       '*-dev' && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
+    rm -rf \
+      /build \
+      /var/lib/apt/lists/* \
       /tmp/* \
       /var/tmp/* \
       /usr/bin/python-config

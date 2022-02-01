@@ -1,0 +1,5 @@
+#!/command/execlineb -P
+with-contenv
+s6-setuidgid epgd
+fdmove -c 2 1
+/usr/local/bin/epghttpd -n -c /epgd/config

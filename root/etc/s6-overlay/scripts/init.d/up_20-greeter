@@ -1,10 +1,4 @@
-#!/usr/bin/with-contenv bash
-
-PUID=${PUID:-911}
-PGID=${PGID:-911}
-
-groupmod -o -g "$PGID" epgd
-usermod -o -u "$PUID" epgd
+#!/command/with-contenv bash
 
 echo '
 --------------------------------------------------------------

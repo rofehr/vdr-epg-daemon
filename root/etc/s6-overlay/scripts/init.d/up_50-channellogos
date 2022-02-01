@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv bash
+#!/command/with-contenv bash
 
 logo_ext_done="/.logo_ext_done"
 logo_dir="/epgd/channellogos"

@@ -1,0 +1,34 @@
+#!/command/with-contenv bash
+
+### !!! this file is also called at finish !!!
+
+
+function chmown {
+	local usr=$1
+	local grp=$2
+	local perm_dir=$3
+	local perm_file=$4
+	local path=$5
+
+	if [ -z "$usr" ] || [ -z "$grp" ] || [ -z "$perm_dir" ] || [ -z "$perm_file" ] || [ -z "$path" ]; then
+		echo "Incorrect use of the function!"
+		return 1
+	else
+		echo "Reassign permissions: $path"
+		chown -R $usr:$grp "$path"
+		find "$path" -type d -exec chmod $perm_dir {} \;
+		find "$path" -type f -exec chmod $perm_file {} \;
+	fi
+}
+
+
+## default files and mount points (docker volumes)
+chown epgd:epgd "/epgd"
+chmown epgd epgd 775 664 "/defaults"
+chmown epgd epgd 775 664 "/epgd/cache"
+chmown epgd epgd 775 664 "/epgd/channellogos"
+chmown epgd epgd 775 664 "/epgd/config"
+chmown epgd epgd 775 664 "/epgd/epgimages"
+
+## syslogd-overlay
+chmown sysllog sysllog 775 664 "/epgd/log"
