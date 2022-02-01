@@ -1,5 +1,14 @@
 #!/command/execlineb -P
 with-contenv
-s6-setuidgid epgd
-fdmove -c 2 1
-/usr/local/bin/epghttpd -n -c /epgd/config
+backtick -D "true" start { printcontenv START_EPGHTTPD }
+importas -usC start start
+foreground {
+ if { test $start = false }
+  foreground { s6-echo epghttpd is disabled by environment variable! }
+  foreground { s6-rmrf /etc/s6-overlay/s6-rc.d/user/contents.d/epghttpd }
+  s6-svc -d -O /run/s6-rc/servicedirs/epghttpd
+}
+if { test $start != false }
+ s6-setuidgid epgd
+ fdmove -c 2 1
+ /usr/local/bin/epghttpd -n -c /epgd/config
