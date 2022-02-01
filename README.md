@@ -13,7 +13,7 @@ It is designed to handle large amount of data and pictures in a distributed envi
 [![GitHub Checks](https://img.shields.io/github/checks-status/lapicidae/vdr-epg-daemon/master?label=build%20check&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=jenkins)](https://github.com/lapicidae/vdr-epg-daemon/commits)
 
 
-VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu), [s6-overlay](https://github.com/just-containers/s6-overlay) and [socklog-overlay](https://github.com/just-containers/socklog-overlay).
+VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) and [s6-overlay](https://github.com/just-containers/s6-overlay).
 
 
 ## Features
@@ -23,7 +23,7 @@ VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu), 
 * integrated [tvm](https://github.com/3PO/epgd-plugin-tvm/) and [tvsp](https://github.com/chriszero/epgd-plugin-tvsp) plugin
 * epghttpd webinterface (including mostly german station logos)
 * eMail notifications via [msmtprc](https://marlam.de/msmtp) - a very simple and easy to use SMTP client
-* log to file - via [socklog-overlay](https://github.com/just-containers/socklog-overlay) with built-in log rotation
+* log to file with built-in log rotation
 
 ### *Note*
 The image is automatically rebuilt when any of the following sources receive an update:
