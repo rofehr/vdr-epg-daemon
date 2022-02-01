@@ -2,4 +2,4 @@
 elglob -0s files /etc/s6-overlay/scripts/init.d/down_*
 forx file { ${files} }
   importas file file
-  foreground { ${file} }
+  ${file}
