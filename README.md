@@ -1,3 +1,7 @@
+> :warning: **UPDATE WARNING:** :warning:  
+> Please delete or update the `PATH` environment variable to add:  
+> `:/command`
+
 [![epgd](epgd-logo.svg)](https://projects.vdr-developer.org/git/vdr-epg-daemon.git)
 
 epgd - a EPG daemon which fetches the EPG and additional data from various sources (like epgdata, eplists.constabel.net, ...) and provide it to the [epg2vdr](https://projects.vdr-developer.org/git/vdr-plugin-epg2vdr.git) plugin via a database (MariaDB or MySQL).  
