@@ -14,7 +14,7 @@ It is designed to handle large amount of data and pictures in a distributed envi
 [![GitHub Stars](https://img.shields.io/github/stars/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/lapicidae/vdr-epg-daemon)
 [![Docker Pulls](https://img.shields.io/docker/pulls/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=pulls&logo=docker)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
 [![Docker Stars](https://img.shields.io/docker/stars/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=stars&logo=docker)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
-[![GitHub Checks](https://img.shields.io/github/checks-status/lapicidae/vdr-epg-daemon/master?label=build%20check&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=jenkins)](https://github.com/lapicidae/vdr-epg-daemon/commits)
+[![Build & Push](https://img.shields.io/github/workflow/status/lapicidae/vdr-epg-daemon/Docker%20Build%20&%20Push?label=Build%20%26%20Push&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/lapicidae/vdr-epg-daemon/actions/workflows/docker.yml)
 
 
 VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) and [s6-overlay](https://github.com/just-containers/s6-overlay).
