@@ -107,6 +107,8 @@ RUN echo "**** install runtime packages ****" && \
     git clone https://github.com/3PO/epgd-plugin-tvm.git ./PLUGINS/tvm && \
     git clone https://github.com/chriszero/epgd-plugin-tvsp.git ./PLUGINS/tvsp && \
     make all install && \
+    echo "**** get alternative eventsview ****" && \
+    wget --quiet -P /defaults/config "https://github.com/MegaV0lt/vdr-plugin-skinflatplus/blob/master/contrib/eventsview-flatplus.sql" && \
     echo "**** get channellogos ****" && \
     cd /tmp && \
     git clone https://github.com/lapicidae/svg-channellogos.git chlogo && \

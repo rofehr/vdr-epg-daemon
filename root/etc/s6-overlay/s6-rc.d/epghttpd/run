@@ -9,6 +9,6 @@ foreground {
   s6-svc -d -O /run/s6-rc/servicedirs/epghttpd
 }
 if { test $start != false }
- s6-setuidgid epgd
  fdmove -c 2 1
+ s6-setuidgid epgd
  /usr/local/bin/epghttpd -n -c /epgd/config

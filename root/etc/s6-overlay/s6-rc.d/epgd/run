@@ -1,5 +1,5 @@
 #!/command/execlineb -P
 with-contenv
-s6-setuidgid epgd
 fdmove -c 2 1
+s6-setuidgid epgd
 /usr/local/bin/epgd -n -p /usr/local/lib/epgd/plugins -c /epgd/config
