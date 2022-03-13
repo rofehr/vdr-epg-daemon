@@ -20,6 +20,7 @@ RUN echo "**** install runtime packages ****" && \
       apt-get update -qq && \
       apt-get upgrade -qy && \
       apt-get install -qy \
+        at \
         bsd-mailx \
         libarchive13 \
         libcurl4 \

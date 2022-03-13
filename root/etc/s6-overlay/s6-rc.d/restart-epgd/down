@@ -1,0 +1,8 @@
+#!/command/execlineb -P
+backtick -n ATQ {
+ pipeline { /usr/bin/atq }
+ s6-cut -f1
+}
+importas -usC ATQ ATQ
+if -n { test -z $ATQ }
+ /usr/bin/atrm $ATQ
