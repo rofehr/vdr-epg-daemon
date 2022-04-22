@@ -52,7 +52,7 @@ RUN echo "**** install runtime packages ****" && \
         libimlib2-dev \
         libjansson-dev \
         libjpeg-dev \
-        libmariadbclient-dev \
+        libmariadb-dev \
         libmicrohttpd-dev \
         libssl-dev \
         libtiff-dev \
