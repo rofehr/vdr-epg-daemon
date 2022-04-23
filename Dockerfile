@@ -30,7 +30,7 @@ RUN echo "**** install runtime packages ****" && \
         libjpeg8 \
         libmariadb3 \
         libmicrohttpd12 \
-        libpython3.8 \
+        libpython3.10 \
         libxml2 \
         libxslt1.1 \
         locales \
