@@ -100,7 +100,8 @@ RUN echo "**** install runtime packages ****" && \
       usermod -a -G mail epgd && \
     echo "**** compile ****" && \
       cd /tmp && \
-      git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
+      #git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
+      git clone https://github.com/vdr-projects/vdr-epg-daemon.git vdr-epg-daemon && \
       cd vdr-epg-daemon && \
       sed -i 's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
       sed -i 's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
