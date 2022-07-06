@@ -6,7 +6,7 @@ COPY root/ /
 
 ARG DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="C" \
-    S6VER="3.1.0.1"
+    S6VER="3.1.1.2"
 
 ENV PATH="$PATH:/command"
 ENV LANG="de_DE.UTF-8" \
