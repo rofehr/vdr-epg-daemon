@@ -1,10 +1,6 @@
-> :warning: **UPDATE WARNING:** :warning:  
-> Please delete or update the `PATH` environment variable to add:  
-> `:/command`
+[![epgd](epgd-logo.svg)](https://github.com/vdr-projects/vdr-epg-daemon)
 
-[![epgd](epgd-logo.svg)](https://projects.vdr-developer.org/git/vdr-epg-daemon.git)
-
-epgd - a EPG daemon which fetches the EPG and additional data from various sources (like epgdata, eplists.constabel.net, ...) and provide it to the [epg2vdr](https://projects.vdr-developer.org/git/vdr-plugin-epg2vdr.git) plugin via a database (MariaDB or MySQL).  
+epgd - a EPG daemon which fetches the EPG and additional data from various sources (like epgdata, eplists.constabel.net, ...) and provide it to the [epg2vdr](https://github.com/horchi/vdr-plugin-epg2vdr) plugin via a database (MariaDB or MySQL).  
 The epgd obtains the EPG from the sources by plugins. A plugin for [epgData](https://www.epgdata.com), [tvm](https://github.com/3PO/epgd-plugin-tvm/) and [tvsp](https://github.com/chriszero/epgd-plugin-tvsp) is contained.  
 It is designed to handle large amount of data and pictures in a distributed environment with one epg-server and many possible vdr-clients.
 
@@ -33,7 +29,7 @@ VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) a
 The image is automatically rebuilt when any of the following sources receive an update:
 
 * [Ubuntu](https://hub.docker.com/_/ubuntu) Official Docker Image - latest
-* [vdr-epg-daemon](https://projects.vdr-developer.org/git/vdr-epg-daemon.git) GitHub repository
+* [vdr-epg-daemon](https://github.com/vdr-projects/vdr-epg-daemon) GitHub repository
 * [epgd-plugin-tvm](https://github.com/3PO/epgd-plugin-tvm) GitHub repository
 * [epgd-plugin-tvsp](https://github.com/chriszero/epgd-plugin-tvsp) GitHub repository
 
@@ -42,7 +38,7 @@ The image is automatically rebuilt when any of the following sources receive an 
 
 ### Dependencies
 
-A MariaDB or MySQL server with integrated [epglv](https://projects.vdr-developer.org/git/vdr-epg-daemon.git/tree/epglv/README) is required to store the epg details.  
+A MariaDB or MySQL server with integrated [epglv](https://github.com/vdr-projects/vdr-epg-daemon/blob/master/epglv/README) is required to store the epg details.  
 For example, you can use the [mariadb-epglv](https://github.com/lapicidae/mariadb-epglv) docker image.
 
 ### Usage
@@ -111,7 +107,7 @@ For example, `-p 8080:80` would expose port `80` from inside the container to be
 | `-e RESTART_EPGD_AT=3:30` | Optional - Change default restart time ([examples](https://www.ibm.com/docs/en/zos/2.5.0?topic=descriptions-run-command-specified-time)) |
 | `-e LOG2FILE=true` | Optional - Write log to file in `/epgd/log` |
 | `-v /epgd/config` | Config files |
-| `-v /epgd/epgimages` | EPG images for use in other plugins or the [live plugin](https://github.com/MarkusEh/vdr-plugin-live) |
+| `-v /epgd/epgimages` | EPG images for use in other plugins (e.g. [live plugin](https://github.com/MarkusEh/vdr-plugin-live)) |
 | `-v /epgd/cache` | Downloaded, temporary files |
 | `-v /epgd/channellogos`| TV station logos used in Webinterface |
 | `-v /epgd/log` | Logfiles if `LOG2FILE=true` |
@@ -132,7 +128,7 @@ In this instance `PUID=1234` and `PGID=4321`, to find yours use `id user` as bel
 
 ## Thanks
 
-* **[VDR EPG Daemon Team](https://projects.vdr-developer.org/projects/vdr-epg-daemon)**
+* **[VDR EPG Daemon Team](https://github.com/vdr-projects/vdr-epg-daemon)**
 * **[Klaus Schmidinger (kls)](http://www.tvdr.de/)**
 * **[vdr-portal.de](https://www.vdr-portal.de/)**
 * **[just-containers](https://github.com/just-containers)**
