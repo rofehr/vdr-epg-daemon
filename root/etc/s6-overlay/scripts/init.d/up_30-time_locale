@@ -2,9 +2,10 @@
 
 
 ## set missing env locale
-if [ ! -z "$LANG" ];then
+if [ -n "$LANG" ];then
 	if [ -z "$LANGUAGE" ]; then
-		export LANGUAGE="$(echo "$LANG" | cut -d "." -f 1):$(echo "$LANG" | cut -d "_" -f 1)"
+		LANGUAGE="$(echo "$LANG" | cut -d "." -f 1):$(echo "$LANG" | cut -d "_" -f 1)"
+		export LANGUAGE
 		printf "%s" "${LANGUAGE}" > /var/run/s6/container_environment/LANGUAGE
 		echo "LANGUAGE not set, setting generated one: $LANGUAGE"
 	fi
@@ -18,13 +19,13 @@ fi
 
 
 ## set timezone
-if [ ! -z "$TZ" ]; then
+if [ -n "$TZ" ]; then
 	if [ -f "/usr/share/zoneinfo/$TZ" ]; then
 		CURRENT_TZ=$(readlink /etc/localtime)
 		if [[ ! $CURRENT_TZ =~ $TZ ]]; then
 			unlink /etc/localtime
-			ln -s /usr/share/zoneinfo/$TZ /etc/localtime
-			echo $TZ >/etc/timezone
+			ln -s /usr/share/zoneinfo/"$TZ" /etc/localtime
+			echo "$TZ" >/etc/timezone
 			dpkg-reconfigure -f noninteractive tzdata
 			echo "Timezone set to: $TZ"
 		fi
