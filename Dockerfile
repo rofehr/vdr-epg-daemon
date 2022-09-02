@@ -6,7 +6,7 @@ COPY root/ /
 
 ARG DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="C" \
-    S6VER="3.1.1.2"
+    S6VER="3.1.2.1"
 
 ENV PATH="$PATH:/command"
 ENV LANG="de_DE.UTF-8" \
@@ -69,7 +69,6 @@ RUN echo "**** install runtime packages ****" && \
       tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz && \
     echo "**** syslogd-overlay ($S6VER) ****" && \
       tar -C / -Jxpf /tmp/syslogd-overlay-noarch.tar.xz && \
-      touch /etc/s6-overlay/s6-rc.d/syslogd-prepare/dependencies.d/init && \
       patch /etc/s6-overlay/s6-rc.d/syslogd-log/run /build/syslogd-log_run.patch && \
       useradd --system --no-create-home --shell /bin/false syslog && \
       useradd --system --no-create-home --shell /bin/false sysllog && \
