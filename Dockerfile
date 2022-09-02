@@ -106,6 +106,7 @@ RUN echo "**** install runtime packages ****" && \
       sed -i 's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
       git clone https://github.com/3PO/epgd-plugin-tvm.git ./PLUGINS/tvm && \
       git clone https://github.com/chriszero/epgd-plugin-tvsp.git ./PLUGINS/tvsp && \
+      patch -p0 /build/notification_timeout.patch && \
       make all install && \
     echo "**** get alternative eventsview ****" && \
       wget --quiet -P /defaults/config "https://raw.githubusercontent.com/MegaV0lt/vdr-plugin-skinflatplus/master/contrib/eventsview-flatplus.sql" && \
