@@ -1,0 +1,84 @@
+diff '--color=auto' -ruN configs/epgd.conf configs/epgd.conf
+--- configs/epgd.conf	2022-04-24 22:55:26.000000000 +0200
++++ configs/epgd.conf	2022-09-02 21:42:07.101618603 +0200
+@@ -48,3 +48,5 @@
+ # Password =
+ 
+ LogLevel = 1
++
++# NotifiTimeout = 5
+diff '--color=auto' -ruN epgdconfig.c epgdconfig.c
+--- epgdconfig.c	2022-04-24 22:55:26.000000000 +0200
++++ epgdconfig.c	2022-09-03 12:30:10.789931473 +0200
+@@ -55,4 +55,6 @@
+ 
+    scrapEpg = yes;
+    scrapRecordings = yes;
++
++   NotifiTimeout = 5;
+ }
+diff '--color=auto' -ruN epgdconfig.h epgdconfig.h
+--- epgdconfig.h	2022-04-24 22:55:26.000000000 +0200
++++ epgdconfig.h	2022-09-03 12:31:10.976595298 +0200
+@@ -54,6 +54,8 @@
+       char scrapMovieDbApiKey[100+TB];
+       int scrapEpg;
+       int scrapRecordings;
++
++      int NotifiTimeout;
+ };
+ 
+ extern cEpgdConfig EpgdConfig;
+diff '--color=auto' -ruN lib/config.c lib/config.c
+--- lib/config.c	2022-04-24 22:55:26.000000000 +0200
++++ lib/config.c	2022-09-02 21:41:07.431608311 +0200
+@@ -19,6 +19,8 @@
+ int cEpgConfig::logFacility = LOG_USER;
+ const char* cEpgConfig::logName = "unknown";
+ 
++int cEpgConfig::NotifiTimeout = 5;
++
+ //***************************************************************************
+ // Common EPG Service Configuration
+ //***************************************************************************
+diff '--color=auto' -ruN lib/config.h lib/config.h
+--- lib/config.h	2022-04-24 22:55:26.000000000 +0200
++++ lib/config.h	2022-09-03 12:10:07.946655917 +0200
+@@ -42,6 +42,8 @@
+       static int argLoglevel;
+       static int logFacility;
+       static const char* logName;
++
++      static int NotifiTimeout;
+ };
+ 
+ #endif // __EPG_CONFIG_H 
+diff '--color=auto' -ruN update.c update.c
+--- update.c	2022-04-24 22:55:26.000000000 +0200
++++ update.c	2022-09-02 21:41:03.418274249 +0200
+@@ -382,6 +382,7 @@
+    else if (!strcasecmp(Name, "HttpPass"))           sstrcpy(EpgdConfig.httpPass, Value, sizeof(EpgdConfig.httpPass));
+ 
+    else if (!strcasecmp(Name, "LogLevel"))           EpgdConfig.loglevel = EpgdConfig.argLoglevel == na ? atoi(Value) : EpgdConfig.argLoglevel;
++   else if (!strcasecmp(Name, "NotifiTimeout"))      EpgdConfig.NotifiTimeout = atoi(Value);
+ 
+    else
+       return fail;
+@@ -1799,7 +1800,7 @@
+ 
+                   connection->startTransaction();
+ 
+-                  cSystemNotification::startNotifyThread(5*tmeSecondsPerMinute);
++                  cSystemNotification::startNotifyThread(EpgdConfig.NotifiTimeout*tmeSecondsPerMinute);
+                   procMergeEpg->call(2);
+                   cSystemNotification::stopNotifyThread();
+ 
+@@ -1876,7 +1877,7 @@
+ 
+       if (!doShutDown())
+       {
+-         cSystemNotification::startNotifyThread(5*tmeSecondsPerMinute);
++         cSystemNotification::startNotifyThread(EpgdConfig.NotifiTimeout*tmeSecondsPerMinute);
+          procMergeEpg->call();
+          cSystemNotification::stopNotifyThread();
+       }
