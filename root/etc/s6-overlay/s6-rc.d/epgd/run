@@ -1,5 +1,5 @@
 #!/command/execlineb -P
 with-contenv
-fdmove -c 2 1
+foreground { s6-echo "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄⚟ Start EPGd ⚞┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄" }
 s6-setuidgid epgd
 /usr/local/bin/epgd -n -p /usr/local/lib/epgd/plugins -c /epgd/config

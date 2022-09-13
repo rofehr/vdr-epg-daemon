@@ -1,8 +1,19 @@
 #!/command/execlineb -P
-backtick -n ATQ {
- pipeline { /usr/bin/atq }
- s6-cut -f1
+backtick -D "NoID" ID {
+ pipeline { atq }
+ pipeline { s6-cut -f1 }
+ s6-grep .
 }
-importas -usC ATQ ATQ
-if -n { test -z $ATQ }
- /usr/bin/atrm $ATQ
+importas -usc id ID
+ forx -o 0 i { ${id} }
+  importas -u jobid i
+  ifelse { s6-test ${jobid} = "NoID" }
+   { exit 0 }
+   backtick -E job {
+    pipeline { at -c ${jobid} }
+    pipeline { s6-grep "\\S" }
+    s6-tail -n 1
+   }
+   if { s6-test ${job} =~ "^s6-svc -r.*epgd$" }
+    foreground { s6-echo "Delete EPGd restart job: ${jobid} (atd)" }
+    atrm ${jobid}
