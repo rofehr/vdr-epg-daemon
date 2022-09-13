@@ -1,7 +1,5 @@
 #!/command/with-contenv bash
 
-### !!! this file is also called at finish !!!
-
 
 function chmown {
 	local usr=$1

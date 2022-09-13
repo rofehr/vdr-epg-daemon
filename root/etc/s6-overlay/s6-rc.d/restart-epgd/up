@@ -1,14 +1,8 @@
 #!/command/execlineb -P
 with-contenv
-backtick -D "false" restart { printcontenv RESTART_EPGD }
-backtick -D "3:30" time { printcontenv RESTART_EPGD_AT }
-multisubstitute
-{
-  importas -usC restart restart
-  importas -usC time time
-}
-if { test $restart != false }
- if -n { test -z $time }
-  foreground { s6-echo "Planing epgd restart..." }
-  pipeline { s6-echo "s6-svc -r /run/service/epgd" }
-  /usr/bin/at $time
+importas -D "false" restart RESTART_EPGD
+importas -D "3:30" time RESTART_EPGD_AT
+if -t { s6-test ${restart} != false }
+ foreground { s6-echo "Planing EPGd restart at ${time}..." }
+ pipeline { s6-echo "s6-svc -r /run/service/epgd" }
+ redirfd -w 2 /dev/null /usr/bin/at ${time}

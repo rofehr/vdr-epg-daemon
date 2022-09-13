@@ -1,0 +1,40 @@
+#!/command/execlineb -P
+with-contenv
+define loc_file "/etc/locale.gen"
+define default_loc "de_DE.UTF-8 UTF-8"
+importas -D "de_DE.UTF-8" lang LANG
+backtick -E -D "de_DE.UTF-8" default_lang {
+ pipeline { s6-echo "${default_loc}" }
+ pipeline { s6-cut -d " " -f1 }
+ s6-grep -v "^$"
+}
+backtick -E -D "${default_lang}" loc_active {
+ pipeline { s6-tail -n +1 "${loc_file}" }
+ pipeline { s6-grep -v "^#" }
+ pipeline { s6-grep -v "^$" }
+ pipeline { s6-grep -v "${default_loc}" }
+ pipeline { s6-cut -d " " -f1 }
+ s6-grep -v "^$"
+}
+backtick -E new_lng {
+ pipeline { s6-echo "${lang}" }
+ pipeline { s6-cut -d "." -f 1 }
+ pipeline { sed "s/$/:${lang}/" }
+ s6-cut -d "_" -f 1-2
+}
+foreground {
+ if { s6-test -f ${loc_file} }
+ if -n { redirfd -w 1 /dev/null expr ${loc_active} : .*${lang}$ }
+  foreground { redirfd -w 1 /dev/null locale-gen ${lang} }
+  foreground { update-locale LANG="${lang}" LANGUAGE="${new_lng}" LC_ALL="${lang}" }
+  foreground { redirfd -w 2 /dev/null dpkg-reconfigure -f noninteractive locales }
+  s6-echo "Locale set to ${lang}"
+}
+foreground {
+ if -n { s6-test -v LANGUAGE }
+  foreground { redirfd -w 1 /var/run/s6/container_environment/LANGUAGE s6-echo -n "${new_lng}" }
+  s6-echo "Environment variable LANGUAGE set to ${new_lng}"
+}
+if -tn { s6-test -v LC_ALL }
+ foreground { redirfd -w 1 /var/run/s6/container_environment/LC_ALL s6-echo -n "${lang}" }
+ s6-echo "Environment variable LC_ALL set to ${lang}"

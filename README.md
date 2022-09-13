@@ -101,7 +101,8 @@ For example, `-p 8080:80` would expose port `80` from inside the container to be
 | `-e PGID=1000` | for GroupID - see below for explanation |
 | `-e TZ=Europe/London` | Specify a [timezone](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List) to use (e.g. Europe/London) |
 | `-e LANG=de_DE.UTF-8` | Default locale; see [list](https://sourceware.org/git/?p=glibc.git;a=blob_plain;f=localedata/SUPPORTED;hb=HEAD) (only `de_DE.UTF-8` is currently supported) |
-| `-e LOGO_COPY=false` | Optional - Use your own station logos in `/epgd/channellogos` |
+| `-e LOGO_INTERNAL=false` | Optional - Use your own station logos in `/epgd/channellogos` |
+| `-e LOGO_OVERWRITE=false` | Optional - Do not overwrite existing logos in `/epgd/channellogos` (only relevant if internal logos are used) |
 | `-e START_EPGHTTPD=false` | Optional - Disable webinterface (epghttpd) |
 | `-e RESTART_EPGD=true` | Optional - Restart epgd once at 3:30 AM after the start of the container |
 | `-e RESTART_EPGD_AT=3:30` | Optional - Change default restart time ([examples](https://www.ibm.com/docs/en/zos/2.5.0?topic=descriptions-run-command-specified-time)) |

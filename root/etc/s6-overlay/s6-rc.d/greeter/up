@@ -1,0 +1,12 @@
+#!/command/execlineb -P
+foreground { s6-echo "╔════════════════════════════════════════════════════════════════╗" }
+foreground { s6-echo "║                      _  _  ____  ____                          ║" }
+foreground { s6-echo "║                     ( \\/ )(  _ \\(  _ \\                         ║" }
+foreground { s6-echo "║                      \\  /  )(_) ))   /                         ║" }
+foreground { s6-echo "║                       \\/  (____/(_)\\_)                         ║" }
+foreground { s6-echo "║  ____  ____   ___    ____    __    ____  __  __  _____  _  _   ║" }
+foreground { s6-echo "║ ( ___)(  _ \\ / __)  (  _ \\  /__\\  ( ___)(  \\/  )(  _  )( \\( )  ║" }
+foreground { s6-echo "║  )__)  )___/( (_-.   )(_) )/(__)\\  )__)  )    (  )(_)(  )  (   ║" }
+foreground { s6-echo "║ (____)(__)   \\___/  (____/(__)(__)(____)(_/\\/\\_)(_____)(_)\\_)  ║" }
+foreground { s6-echo "║      https://github.com/vdr-projects/vdr-epg-daemon.git        ║" }
+s6-echo "╚════════════════════════════════════════════════════════════════╝"

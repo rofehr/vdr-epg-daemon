@@ -10,7 +10,8 @@ ARG DEBIAN_FRONTEND="noninteractive" \
 
 ENV PATH="$PATH:/command"
 ENV LANG="de_DE.UTF-8" \
-    S6_CMD_WAIT_FOR_SERVICES_MAXTIME="0"
+    S6_CMD_WAIT_FOR_SERVICES_MAXTIME="0" \
+    S6_VERBOSITY="1"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-noarch.tar.xz /tmp
 ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-x86_64.tar.xz /tmp

@@ -1,0 +1,10 @@
+#!/command/execlineb -P
+with-contenv
+define main_dir "/epgd"
+define conf_dir "${main_dir}/config"
+foreground {
+ if -n { s6-test -d "${conf_dir}" }
+  s6-mkdir -p -m 0755 "${conf_dir}"
+ }
+foreground { s6-echo "Prepare workdir" }
+cp -RPpn /defaults/config/. "${conf_dir}"
