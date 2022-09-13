@@ -5,7 +5,7 @@
 function usage {
 	echo -e "\n"
 	echo "############################## SVDRP send ##############################" 1>&2
-	if [ ! -z "${1}" ]; then
+	if [ -n "${1}" ]; then
 		echo "ERROR: $1" 1>&2
 	fi
 	echo "Usage: $0 options command..." 1>&2
@@ -18,7 +18,7 @@ function usage {
 
 
 ### check Parameters
-while getopts "d:p:h" o; do
+while getopts "d:p:" o; do
 	case "${o}" in
 		d)
 			HOST=${OPTARG}
@@ -26,31 +26,28 @@ while getopts "d:p:h" o; do
 		p)
 			PORT=${OPTARG}
 			;;
-		h)
-			usage
+		*)
+			usage "$@"
 			;;
 	esac
 done
+shift "$((OPTIND-1))"
 
 
 ## get the rest
-shift $((OPTIND-1))
-declare -a ARGS=()
-while test $# -gt 0; do
-  ARGS+=("$1")
-  shift
-done
+IFS=" "
+readarray -t args <<<"$@"
 
-if [ ! ${array[@]} ]; then
-    ARGS+=("HELP")
+if [ -z "${args[0]}" ]; then
+    args+=("HELP")
 fi
 
 
 # Your BASH have to be compiled with /dev/tcp/ support!
-exec 5<>/dev/tcp/${HOST:-localhost}/${PORT:-6419} || usage
+exec 5<>/dev/tcp/"${HOST:-localhost}"/"${PORT:-6419}" || usage
 
-echo ${ARGS[*]} >&5
-while read -t 1 i ; do
+echo "${args[*]}" >&5
+while read -rt 1 i ; do
     echo "$i"
 done <&5
 exec 5>&-
