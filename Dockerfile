@@ -78,7 +78,7 @@ RUN echo "**** install runtime packages ****" && \
       locale-gen $LANG && \
       update-locale LANG="$LANG" LANGUAGE="$(echo "$LANG" | cut -d "." -f 1):$(echo "$LANG" | cut -d "_" -f 1)" && \
     echo "**** bash tweaks ****" && \
-      echo "[ -r /usr/bin/contenv2env ] && . /usr/bin/contenv2env" >> /etc/bash.bashrc && \
+      echo "[ -r /usr/local/bin/contenv2env ] && . /usr/local/bin/contenv2env" >> /etc/bash.bashrc && \
       echo "[ -r /etc/bash.aliases ] && . /etc/bash.aliases" >> /etc/bash.bashrc && \
       rm -rf /root/.bashrc && \
     echo "**** create epgd user ****" && \
@@ -121,10 +121,10 @@ RUN echo "**** install runtime packages ****" && \
       chown -R epgd:epgd /defaults && \
       chown -R epgd:epgd /epgd && \
       chown -R sysllog:sysllog /epgd/log && \
-      chown root:root /usr/bin/contenv2env && \
-      chmod 755 /usr/bin/contenv2env && \
-      chown root:root /usr/bin/svdrpsend && \
-      chmod 755 /usr/bin/svdrpsend && \
+      chown root:root /usr/local/bin/contenv2env && \
+      chmod 755 /usr/local/bin/contenv2env && \
+      chown root:root /usr/local/bin/svdrpsend && \
+      chmod 755 /usr/local/bin/svdrpsend && \
     echo "**** cleanup ****" && \
       apt-get purge -qy --auto-remove \
         build-essential \
