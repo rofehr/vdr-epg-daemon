@@ -100,7 +100,6 @@ RUN echo "**** install runtime packages ****" && \
       usermod -a -G mail epgd && \
     echo "**** compile ****" && \
       cd /tmp && \
-      #git clone https://projects.vdr-developer.org/git/vdr-epg-daemon.git vdr-epg-daemon && \
       git clone https://github.com/vdr-projects/vdr-epg-daemon.git vdr-epg-daemon && \
       cd vdr-epg-daemon && \
       sed -i 's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
@@ -129,8 +128,8 @@ RUN echo "**** install runtime packages ****" && \
       apt-get purge -qy --auto-remove \
         build-essential \
         git \
-        wget \
-        '*-dev' && \
+        wget && \
+      dpkg -l | grep "\-dev" | sed 's/ \+ /|/g' | cut -d '|' -f 2 | cut -d ':' -f 1 | xargs apt-get purge --auto-remove -qy && \
       apt-get clean && \
       rm -rf \
         /build \
