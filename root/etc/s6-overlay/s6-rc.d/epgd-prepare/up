@@ -4,6 +4,6 @@ define msmtp_conf_new "/epgd/config/eMail.conf"
 if { s6-test -f "${msmtp_conf_new}" }
 if -tn { cmp --silent ${msmtp_conf} ${msmtp_conf_new} }
  foreground { cp -f ${msmtp_conf_new} ${msmtp_conf} }
- foreground { s6-envuidgid root s6-chown -U ${msmtp_conf} }
+ foreground { s6-envuidgid -B root:mail s6-chown -U ${msmtp_conf} }
  foreground { s6-chmod 0640 ${msmtp_conf} }
  s6-echo "New eMail config copied"
