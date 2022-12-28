@@ -7,11 +7,10 @@ It is designed to handle large amount of data and pictures in a distributed envi
 
 # [lapicidae/vdr-epg-daemon](https://github.com/lapicidae/vdr-epg-daemon)
 
-[![GitHub Stars](https://img.shields.io/github/stars/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/lapicidae/vdr-epg-daemon)
-[![Docker Pulls](https://img.shields.io/docker/pulls/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=pulls&logo=docker)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
-[![Docker Stars](https://img.shields.io/docker/stars/lapicidae/vdr-epg-daemon.svg?color=3c0e7b&labelColor=555555&logoColor=ffffff&style=for-the-badge&label=stars&logo=docker)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
-[![Build & Push](https://img.shields.io/github/workflow/status/lapicidae/vdr-epg-daemon/Docker%20Build%20&%20Push?label=Build%20%26%20Push&labelColor=555555&logoColor=ffffff&style=for-the-badge&logo=github)](https://github.com/lapicidae/vdr-epg-daemon/actions/workflows/docker.yml)
-
+[![GitHub Repo stars](https://img.shields.io/github/stars/lapicidae/vdr-epg-daemon?color=3c0e7b&logo=github&logoColor=fff&style=for-the-badge)](https://github.com/lapicidae/vdr-epg-daemon)
+[![Docker Pulls](https://img.shields.io/docker/pulls/lapicidae/vdr-epg-daemon?color=3c0e7b&label=pulls&logo=docker&logoColor=fff&style=for-the-badge)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
+[![Docker Stars](https://img.shields.io/docker/stars/lapicidae/vdr-epg-daemon?color=3c0e7b&label=stars&logo=docker&logoColor=fff&style=for-the-badge)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/lapicidae/vdr-epg-daemon/docker.yml?logo=github&logoColor=ffffff&style=for-the-badge)](https://github.com/lapicidae/vdr-epg-daemon/actions/workflows/docker.yml)
 
 VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) and [s6-overlay](https://github.com/just-containers/s6-overlay).
 
