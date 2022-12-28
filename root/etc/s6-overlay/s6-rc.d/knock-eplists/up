@@ -1,0 +1,15 @@
+#!/command/execlineb -P
+with-contenv
+define url "eplists.de"
+define port "2006"
+importas -D "true" knock KNOCK_EPLISTS
+if -t { s6-test ${knock} != "false" }
+ forbacktickx -x 0 -E num { seq 1 5 }
+  backtick -D 2 -E wait { expr ${num} * 5 }
+  ifelse { redirfd -w 2 /dev/null s6-maximumtime 2000 bash -c "</dev/tcp/${url}/${port}" }
+   { s6-echo "Site '${url}:${port}' is available" }
+   foreground {
+    foreground { s6-echo "Site '${url}:${port}' does not respond, retry in ${wait} seconds" }
+    foreground { s6-sleep ${wait} }
+   }
+   exit 1

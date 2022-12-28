@@ -95,7 +95,7 @@ These parameters are separated by a colon and indicate `<external>:<internal>` r
 For example, `-p 8080:80` would expose port `80` from inside the container to be accessible from the host's IP on port `8080` outside the container.
 
 | Parameter | Function |
-| :----: | --- |
+|-----|-----|
 | `-p 9999` | epghttpd Webinterface |
 | `-e PUID=1000` | for UserID - see below for explanation |
 | `-e PGID=1000` | for GroupID - see below for explanation |
@@ -106,6 +106,7 @@ For example, `-p 8080:80` would expose port `80` from inside the container to be
 | `-e START_EPGHTTPD=false` | Optional - Disable webinterface (epghttpd) |
 | `-e RESTART_EPGD=true` | Optional - Restart epgd once at 3:30 AM after the start of the container |
 | `-e RESTART_EPGD_AT=3:30` | Optional - Change default restart time ([examples](https://www.ibm.com/docs/en/zos/2.5.0?topic=descriptions-run-command-specified-time)) |
+| `-e KNOCK_EPLISTS=false` | Optional - Disable connection ceck  |
 | `-e LOG2FILE=true` | Optional - Write log to file in `/epgd/log` |
 | `-v /epgd/config` | Config files |
 | `-v /epgd/epgimages` | EPG images for use in other plugins (e.g. [live plugin](https://github.com/MarkusEh/vdr-plugin-live)) |
