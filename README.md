@@ -28,7 +28,7 @@ VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) a
 The image is automatically rebuilt when any of the following sources receive an update:
 
 * [Ubuntu](https://hub.docker.com/_/ubuntu) Official Docker Image - latest
-* [vdr-epg-daemon](https://github.com/vdr-projects/vdr-epg-daemon) GitHub repository
+* [vdr-epg-daemon](https://github.com/horchi/vdr-epg-daemon) GitHub repository
 * [epgd-plugin-tvm](https://github.com/3PO/epgd-plugin-tvm) GitHub repository
 * [epgd-plugin-tvsp](https://github.com/chriszero/epgd-plugin-tvsp) GitHub repository
 
@@ -129,7 +129,7 @@ In this instance `PUID=1234` and `PGID=4321`, to find yours use `id user` as bel
 
 ## Thanks
 
-* **[VDR EPG Daemon Team](https://github.com/vdr-projects/vdr-epg-daemon)**
+* **[VDR EPG Daemon Team](https://github.com/horchi/vdr-epg-daemon)**
 * **[Klaus Schmidinger (kls)](http://www.tvdr.de/)**
 * **[vdr-portal.de](https://www.vdr-portal.de/)**
 * **[just-containers](https://github.com/just-containers)**
