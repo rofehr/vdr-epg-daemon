@@ -4,12 +4,12 @@ define logo_ext_done "/.logo_ext_done"
 define logo_dir "/epgd/channellogos"
 importas -D "true" logo_internal LOGO_INTERNAL
 importas -D "true" logo_overwrite LOGO_OVERWRITE
-if -tn { s6-test -e ${logo_ext_done} }
-if -t { s6-test ${logo_internal} != "false" }
-if -tn { s6-test -v LOGO_COPY }		# do nothing if legacy variable set
+if -tn { eltest -e ${logo_ext_done} }
+if -t { eltest ${logo_internal} != "false" }
+if -tn { eltest -v LOGO_COPY }		# do nothing if legacy variable set
  foreground { s6-echo "Extract new channellogos: ${logo_dir}" }
  foreground {
-  ifelse { s6-test ${logo_overwrite} != "false" }
+  ifelse { eltest ${logo_overwrite} != "false" }
    { tar xf "/defaults/channellogos.tar.xz" --owner=epgd --group=epgd --overwrite -C "${logo_dir}" }
    tar xf "/defaults/channellogos.tar.xz" --owner=epgd --group=epgd --skip-old-files -C "${logo_dir}"
  }

@@ -2,7 +2,7 @@
 with-contenv
 importas -D "false" restart RESTART_EPGD
 importas -D "3:30" time RESTART_EPGD_AT
-if -t { s6-test ${restart} != false }
+if -t { eltest ${restart} != false }
  foreground { s6-echo "Planing EPGd restart at ${time}..." }
  pipeline { s6-echo "s6-svc -r /run/service/epgd" }
  redirfd -w 2 /dev/null /usr/bin/at ${time}

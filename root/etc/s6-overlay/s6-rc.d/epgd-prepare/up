@@ -1,7 +1,7 @@
 #!/command/execlineb -P
 define msmtp_conf "/etc/msmtprc"
 define msmtp_conf_new "/epgd/config/eMail.conf"
-if { s6-test -f "${msmtp_conf_new}" }
+if { eltest -f "${msmtp_conf_new}" }
 if -tn { cmp --silent ${msmtp_conf} ${msmtp_conf_new} }
  foreground { cp -f ${msmtp_conf_new} ${msmtp_conf} }
  foreground { s6-envuidgid -B root:mail s6-chown -U ${msmtp_conf} }

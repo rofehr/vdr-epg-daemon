@@ -12,7 +12,7 @@
    importas -usC T line
    define dir /var/log/syslogd
  }
-+backtick -D "1" loggir_epgd { if { s6-test $fileLOG = true } s6-echo "1" "$T" "/epgd/log" }
++backtick -D "1" loggir_epgd { if { eltest $fileLOG = true } s6-echo "1" "$T" "/epgd/log" }
 +importas -usC LOGGIR_EPGD loggir_epgd
  exec -c
  s6-log -d3 --

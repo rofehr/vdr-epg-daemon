@@ -18,27 +18,27 @@ foreground { pipeline { printcontenv LANG } pipeline { s6-quote-filter } xargs p
 foreground { pipeline { printcontenv LANGUAGE } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Language:" }
 foreground { pipeline { realpath --relative-to /usr/share/zoneinfo /etc/localtime } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Timezone:" }
 foreground {
- if { s6-test -v LOGO_INTERNAL }
+ if { eltest -v LOGO_INTERNAL }
   pipeline { printcontenv LOGO_INTERNAL } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Internal logos:"
 }
 foreground {
- if { s6-test -v LOGO_OVERWRITE }
+ if { eltest -v LOGO_OVERWRITE }
   pipeline { printcontenv LOGO_OVERWRITE } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Overwrite existing logos:"
 }
 foreground {
- if { s6-test -v START_EPGHTTPD }
+ if { eltest -v START_EPGHTTPD }
   pipeline { printcontenv START_EPGHTTPD } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Enable webinterface:"
 }
 foreground {
- if { s6-test -v RESTART_EPGD }
+ if { eltest -v RESTART_EPGD }
   pipeline { printcontenv RESTART_EPGD } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Restart EPGd:"
 }
 foreground {
- if { s6-test -v RESTART_EPGD_AT }
+ if { eltest -v RESTART_EPGD_AT }
   pipeline { printcontenv RESTART_EPGD_AT } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Restart EPGd at:"
 }
 foreground {
- if { s6-test -v LOG2FILE }
+ if { eltest -v LOG2FILE }
   pipeline { printcontenv LOG2FILE } pipeline { s6-quote-filter } xargs printf "%-26s%s\n" "Log2File:"
 }
 s6-echo "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄"

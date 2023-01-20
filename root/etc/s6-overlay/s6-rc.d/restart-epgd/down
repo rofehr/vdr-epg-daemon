@@ -7,13 +7,13 @@ backtick -D "NoID" ID {
 importas -usc id ID
  forx -o 0 i { ${id} }
   importas -u jobid i
-  ifelse { s6-test ${jobid} = "NoID" }
+  ifelse { eltest ${jobid} = "NoID" }
    { exit 0 }
    backtick -E job {
     pipeline { at -c ${jobid} }
     pipeline { s6-grep "\\S" }
     s6-tail -n 1
    }
-   if { s6-test ${job} =~ "^s6-svc -r.*epgd$" }
+   if { eltest ${job} =~ "^s6-svc -r.*epgd$" }
     foreground { s6-echo "Delete EPGd restart job: ${jobid} (atd)" }
     atrm ${jobid}
