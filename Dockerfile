@@ -4,7 +4,8 @@ LABEL maintainer="lapicidae"
 
 COPY root/ /
 
-ARG DEBIAN_FRONTEND="noninteractive" \
+ARG EPGD_DEV="false" \
+    DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="C" \
     S6VER="3.1.3.0"
 
@@ -95,21 +96,23 @@ RUN echo "**** install runtime packages ****" && \
       mkdir -p /epgd/log && \
     echo "**** SMTP client ****" && \
       apt-get install -qy msmtp-mta && \
-      wget --quiet -O /etc/msmtprc "https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example" && \
+      wget --quiet -O /etc/msmtprc 'https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example' && \
       chmod 640 /etc/msmtprc && \
       usermod -a -G mail epgd && \
     echo "**** compile ****" && \
       cd /tmp && \
-      git clone https://github.com/horchi/vdr-epg-daemon.git vdr-epg-daemon && \
+      epgdREPO='https://github.com/horchi/vdr-epg-daemon.git' && \
+      [ "$EPGD_DEV" = 'true' ] && \
+      git clone "$epgdREPO" vdr-epg-daemon || \
+      git -c advice.detachedHead=false clone "$epgdREPO" --single-branch --branch $(git ls-remote --tags --sort=-version:refname --refs "$epgdREPO" | head -n 1 | cut -d/ -f3) vdr-epg-daemon && \
       cd vdr-epg-daemon && \
       sed -i 's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config && \
       sed -i 's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config && \
       git clone https://github.com/3PO/epgd-plugin-tvm.git ./PLUGINS/tvm && \
       git clone https://github.com/chriszero/epgd-plugin-tvsp.git ./PLUGINS/tvsp && \
-      patch -t -p0 -i /build/notification_timeout.patch && \
       make all install && \
     echo "**** get alternative eventsview ****" && \
-      wget --quiet -P /defaults/config "https://raw.githubusercontent.com/MegaV0lt/vdr-plugin-skinflatplus/master/contrib/eventsview-flatplus.sql" && \
+      wget --quiet -P /defaults/config 'https://raw.githubusercontent.com/MegaV0lt/vdr-plugin-skinflatplus/master/contrib/eventsview-flatplus.sql' && \
     echo "**** get channellogos ****" && \
       cd /tmp && \
       git clone https://github.com/lapicidae/svg-channellogos.git chlogo && \
