@@ -7,4 +7,7 @@ foreground {
   s6-mkdir -p -m 0755 "${conf_dir}"
  }
 foreground { s6-echo "Prepare workdir" }
-cp -RPpn /defaults/config/. "${conf_dir}"
+foreground { cp -RPpn /defaults/config/. "${conf_dir}" }
+if -nt { eltest /defaults/config/epg.dat -ef "${conf_dir}/epg.dat" }
+ foreground { s6-echo "copy new dictionary (epg.dat)" }
+ cp -pb /defaults/config/epg.dat "${conf_dir}/epg.dat"
