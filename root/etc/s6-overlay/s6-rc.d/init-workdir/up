@@ -9,5 +9,5 @@ foreground {
 foreground { s6-echo "Prepare workdir" }
 foreground { cp -RPpn /defaults/config/. "${conf_dir}" }
 if -nt { eltest /defaults/config/epg.dat -ef "${conf_dir}/epg.dat" }
- foreground { s6-echo "copy new dictionary (epg.dat)" }
+ foreground { s6-echo "Copy new dictionary (epg.dat)" }
  cp -pb /defaults/config/epg.dat "${conf_dir}/epg.dat"
