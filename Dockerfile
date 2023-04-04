@@ -5,7 +5,7 @@ LABEL maintainer="lapicidae"
 COPY root/ /
 
 ARG DEBIAN_FRONTEND="noninteractive" \
-    S6VER="3.1.4.1" \
+    S6VER="3.1.4.2" \
     inVM="true"
 
 ENV PATH="$PATH:/command"
