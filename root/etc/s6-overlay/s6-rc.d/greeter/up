@@ -8,5 +8,5 @@ foreground { s6-echo "║  ____  ____   ___    ____    __    ____  __  __  _____
 foreground { s6-echo "║ ( ___)(  _ \\ / __)  (  _ \\  /__\\  ( ___)(  \\/  )(  _  )( \\( )  ║" }
 foreground { s6-echo "║  )__)  )___/( (_-.   )(_) )/(__)\\  )__)  )    (  )(_)(  )  (   ║" }
 foreground { s6-echo "║ (____)(__)   \\___/  (____/(__)(__)(____)(_/\\/\\_)(_____)(_)\\_)  ║" }
-foreground { s6-echo "║      https://github.com/vdr-projects/vdr-epg-daemon.git        ║" }
+foreground { s6-echo "║            https://github.com/horchi/vdr-epg-daemon            ║" }
 s6-echo "╚════════════════════════════════════════════════════════════════╝"
