@@ -117,6 +117,7 @@ mkdir -p /epgd/log
 _ntfy 'SMTP client'
 apt-get install -qy msmtp-mta
 wget --quiet -O /etc/msmtprc 'https://git.marlam.de/gitweb/?p=msmtp.git;a=blob_plain;f=doc/msmtprc-system.example'
+chown root:mail /etc/msmtprc
 chmod 640 /etc/msmtprc
 usermod -a -G mail epgd
 
