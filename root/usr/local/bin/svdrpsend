@@ -2,7 +2,7 @@
 
 
 # Usage Message
-function usage {
+usage () {
 	echo -e "\n"
 	echo "############################## SVDRP send ##############################" 1>&2
 	if [ -n "${1}" ]; then
@@ -17,7 +17,7 @@ function usage {
 }
 
 
-### check Parameters
+## check Parameters
 while getopts "d:p:" o; do
 	case "${o}" in
 		d)
@@ -34,20 +34,44 @@ done
 shift "$((OPTIND-1))"
 
 
+## defaults
+HOST=${HOST:-localhost}
+PORT=${PORT:-6419}
+
+
 ## get the rest
-IFS=" "
-readarray -t args <<<"$@"
+mapfile -t args <<<"$@"
 
 if [ -z "${args[0]}" ]; then
-    args+=("HELP")
+	args+=("HELP")
 fi
 
 
-# Your BASH have to be compiled with /dev/tcp/ support!
-exec 5<>/dev/tcp/"${HOST:-localhost}"/"${PORT:-6419}" || usage
+## Profit
 
-echo "${args[*]}" >&5
-while read -rt 1 i ; do
-    echo "$i"
-done <&5
-exec 5>&-
+# bash /dev/tcp
+# Your BASH have to be compiled with '/dev/tcp' support!
+if [ -d /dev/tcp ]; then
+	exec 5<>/dev/tcp/"${HOST}"/"${PORT}" || usage
+
+	echo "${args[*]}" >&5
+	while read -rt 1 i ; do
+		echo "$i"
+	done <&5
+	exec 5>&-
+
+# gawk
+elif command -v gawk >/dev/null 2>&1; then
+	awk -v host="$HOST" -v port="$PORT" -v arg="$(printf '%s ' "${args[*]}")" \
+	'BEGIN {
+		SVDRP = "/inet/tcp/0/"host"/"port
+		PROCINFO[SVDRP, "READ_TIMEOUT"] = 150
+		print arg |& SVDRP
+		while ((SVDRP |& getline) > 0)
+			print $0
+		close(SVDRP)
+	}' || usage
+
+else
+	usage
+fi
