@@ -42,7 +42,7 @@ apt-get install -qy \
   libjpeg8 \
   libmariadb3 \
   libmicrohttpd12 \
-  libpython3.10 \
+  '^libpython[3-9]+.\b([0-9]|[1-9][0-9]|999)\b$' \
   libxml2 \
   libxslt1.1 \
   locales \
@@ -109,7 +109,7 @@ mkdir -p /defaults/channellogos
 mkdir -p /defaults/config
 mkdir -p /epgd/cache
 mkdir -p /epgd/epgimages && mkdir -p /var/cache/vdr
-ln -s /epgd/epgimages /var/cache/vdr/epgimages 
+ln -s /epgd/epgimages /var/cache/vdr/epgimages
 mkdir -p /epgd/channellogos && mkdir -p /var/epgd/www
 ln -s /epgd/channellogos /var/epgd/www/channellogos
 mkdir -p /epgd/log
