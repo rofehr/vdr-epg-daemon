@@ -7,9 +7,11 @@ set -e
 ## Ideally, change these variables via 'docker build-arg'
 # e.g.: docker build --tag vdr-epg-daemon --build-arg EPGD_DEV=true .
 inVM=${inVM:-"false"}
-maintainer=${maintainer:-"lapicidae <github.com/lapicidae>"}
-S6VER=${S6VER:-"none"}
+S6VER=${S6VER:-"unknown"}
 EPGD_DEV=${EPGD_DEV:-"false"}
+epgdVersion=${epgdVersion:-"unknown"}
+baseIMAGE=${baseIMAGE:-"debian"}
+baseTAG=${baseTAG:-"stable-slim"}
 
 
 ## Do not change!
@@ -28,57 +30,75 @@ trap 'printf "\n\e[31;1;2m> %s\nCommand terminated with exit code %s.\e[m\n" "$B
 
 
 ## Profit!
-_ntfy 'install runtime packages'
+_ntfy 'prepare'
+runtimePKG=(
+    at
+    bsd-mailx
+    libarchive13
+    libcurl4
+    libimlib2
+    libjansson4
+    libmariadb3
+    libmicrohttpd12
+    '^libpython[3-9]+.\b([0-9]|[1-9][0-9]|999)\b$'
+    libxml2
+    libxslt1.1
+    locales
+    passwd
+    python3
+    ssmtp
+    tzdata
+    unzip
+    uuid
+    zlib1g
+)
+buildPKG=(
+    build-essential
+    git
+    libarchive-dev
+    libcurl4-openssl-dev
+    libimlib2-dev
+    libjansson-dev
+    libmariadb-dev
+    libmicrohttpd-dev
+    libssl-dev
+    libtiff-dev
+    libxml2-dev
+    libxslt1-dev
+    python3-dev
+    uuid-dev
+    wget
+    xz-utils
+    zlib1g-dev
+)
+if [ "$baseIMAGE" = 'ubuntu' ]; then
+    runtimePKG+=(libjpeg8)
+    buildPKG+=(libjpeg-dev)
+elif [ "$baseIMAGE" = 'debian' ]; then
+    runtimePKG+=(
+        libjpeg62-turbo
+        locales-all
+    )
+    buildPKG+=(libjpeg62-turbo-dev)
+else
+  printf '\e[31;1;2m!!! WRONG BASE IMAGE !!!\e[m\n'
+  exit 1
+fi
+
+_ntfy 'upgrade'
 apt-get update -qq
 apt-get upgrade -qy
-apt-get install -qy \
-  at \
-  bsd-mailx \
-  libarchive13 \
-  libcurl4 \
-  libimlib2 \
-  libimlib2 \
-  libjansson4 \
-  libjpeg8 \
-  libmariadb3 \
-  libmicrohttpd12 \
-  '^libpython[3-9]+.\b([0-9]|[1-9][0-9]|999)\b$' \
-  libxml2 \
-  libxslt1.1 \
-  locales \
-  passwd \
-  python3 \
-  ssmtp \
-  tzdata \
-  unzip \
-  uuid \
-  wget \
-  zlib1g
+
+_ntfy 'install runtime packages'
+apt-get install -qy "${runtimePKG[@]}"
 [ ! -e '/usr/bin/python' ] && ln -sf "$(which python3)" '/usr/bin/python'
 
 _ntfy 'install build packages'
-apt-get install -qy \
-  build-essential \
-  git \
-  libarchive-dev \
-  libcurl4-openssl-dev \
-  libimlib2-dev \
-  libjansson-dev \
-  libjpeg-dev \
-  libmariadb-dev \
-  libmicrohttpd-dev \
-  libssl-dev \
-  libtiff-dev \
-  libxml2-dev \
-  libxslt1-dev \
-  python3-dev \
-  uuid-dev \
-  xz-utils \
-  zlib1g-dev
+apt-get install -qy "${buildPKG[@]}"
 [ ! -e '/usr/bin/python-config' ] && ln -sf "$(which python3-config)" '/usr/bin/python-config'
 
 _ntfy "s6-overlay ($S6VER)"
-cd /tmp
+cd /tmp || exit 1
 tar -C / -Jxpf /tmp/s6-overlay-noarch.tar.xz
 tar -C / -Jxpf /tmp/s6-overlay-x86_64.tar.xz
 
@@ -121,15 +141,15 @@ chown root:mail /etc/msmtprc
 chmod 640 /etc/msmtprc
 usermod -a -G mail epgd
 
-_ntfy 'compile'
-cd /tmp
+_ntfy "compile ${epgdVersion}"
+cd /tmp || exit 1
 epgdREPO='https://github.com/horchi/vdr-epg-daemon.git'
 if [ "$EPGD_DEV" = 'true' ]; then
     git clone "$epgdREPO" vdr-epg-daemon
 else
     git -c advice.detachedHead=false clone "$epgdREPO" --single-branch --branch "$(git ls-remote --tags --sort=-version:refname --refs "$epgdREPO" | head -n 1 | cut -d/ -f3)" vdr-epg-daemon
 fi
-cd vdr-epg-daemon
+cd vdr-epg-daemon || exit 1
 # shellcheck disable=SC2016
 sed -i 's/CONFDEST     = $(DESTDIR)\/etc\/epgd/CONFDEST     = $(DESTDIR)\/defaults\/config/g' Make.config
 sed -i 's/INIT_SYSTEM  = systemd/INIT_SYSTEM  = none/g' Make.config
@@ -141,11 +161,11 @@ _ntfy 'get alternative eventsview'
 wget --quiet -P /defaults/config 'https://raw.githubusercontent.com/MegaV0lt/vdr-plugin-skinflatplus/master/contrib/eventsview-flatplus.sql'
 
 _ntfy 'get channellogos'
-cd /tmp
+cd /tmp || exit 1
 git clone https://github.com/lapicidae/svg-channellogos.git chlogo
 chmod +x chlogo/tools/install
 chlogo/tools/install -c dark -p /tmp/channellogos -r
-tar -cpJf /defaults/channellogos.tar.xz -C /tmp/channellogos . &&\
+tar -cpJf /defaults/channellogos.tar.xz -C /tmp/channellogos .
 
 _ntfy 'change permissions'
 chown -R epgd:epgd /defaults
@@ -157,18 +177,15 @@ chown root:root /usr/local/bin/svdrpsend
 chmod 755 /usr/local/bin/svdrpsend
 
 _ntfy 'cleanup'
-apt-get purge -qy --auto-remove \
-  build-essential \
-  git \
-  wget
-dpkg -l | grep "\-dev" | sed 's/ \+ /|/g' | cut -d '|' -f 2 | cut -d ':' -f 1 | xargs apt-get purge --auto-remove -qy
+apt-get purge -qy --auto-remove "${buildPKG[@]}"
+#dpkg -l | grep "\-dev" | sed 's/ \+ /|/g' | cut -d '|' -f 2 | cut -d ':' -f 1 | xargs apt-get purge --auto-remove -qy
 apt-get clean
 rm -rf \
-  /build \
-  /var/lib/apt/lists/* \
-  /tmp/* \
-  /var/tmp/* \
-  /usr/bin/python-config
+    /build \
+    /var/lib/apt/lists/* \
+    /tmp/* \
+    /var/tmp/* \
+    /usr/bin/python-config
 
 
 ## Delete this script if it is running in a Docker container
