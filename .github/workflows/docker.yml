@@ -45,8 +45,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            baseIMAGE: debian
-            baseTAG: stable-slim
+            baseIMAGE=debian
+            baseTAG=stable-slim
           no-cache: true
           push: true
           tags: |
@@ -59,8 +59,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           build-args: |
-            baseIMAGE: ubuntu
-            baseTAG: latest
+            baseIMAGE=ubuntu
+            baseTAG=latest
           no-cache: true
           push: true
           tags: |
