@@ -41,7 +41,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_TOKEN }}
       - name: Build and push - DEBIAN
-        if: ${{ (github.event.inputs.tags = 'bld_debian') || (github.event.inputs.tags = 'bld_all') }}
+        if: ${{ (github.event.inputs.tags == 'bld_debian') || (github.event.inputs.tags == 'bld_all') }}
         uses: docker/build-push-action@v5
         with:
           build-args: |
@@ -55,7 +55,7 @@ jobs:
             ghcr.io/${{ github.repository }}:${{ env.latestTAG }}
             ghcr.io/${{ github.repository }}:debian
       - name: Build and push - UBUNTU
-        if: ${{ (github.event.inputs.tags = 'bld_ubuntu') || (github.event.inputs.tags = 'bld_all') }}
+        if: ${{ (github.event.inputs.tags == 'bld_ubuntu') || (github.event.inputs.tags == 'bld_all') }}
         uses: docker/build-push-action@v5
         with:
           build-args: |
