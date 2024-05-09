@@ -56,8 +56,8 @@ jobs:
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
-          username: ${{ github.repository_owner }}
-          password: ${{ secrets.GHCR_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and push - DEBIAN
         if: ${{ (github.event.inputs.tags == 'bld_debian') || (github.event.inputs.tags == 'bld_all') }}
         uses: docker/build-push-action@v5
@@ -72,8 +72,8 @@ jobs:
           no-cache: true
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY }}:${{ env.latestTAG }}
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY }}:debian
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:${{ env.latestTAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:debian
             ghcr.io/${{ github.repository }}:${{ env.latestTAG }}
             ghcr.io/${{ github.repository }}:debian
       - name: Build and push - UBUNTU
@@ -90,7 +90,7 @@ jobs:
           no-cache: true
           push: true
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.REPOSITORY }}:ubuntu
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:ubuntu
             ghcr.io/${{ github.repository }}:ubuntu
       - name: Send mail
         if: ${{ github.event_name == 'workflow_dispatch' }}
@@ -122,8 +122,8 @@ jobs:
             </html>
           priority: low
     env:
+      imageNAME: vdr-epg-daemon
       latestTAG: latest
-      REPOSITORY: vdr-epg-daemon
       DEBIANbaseIMAGE: debian
       DEBIANbaseTAG: stable-slim
       UBUNTUbaseIMAGE: ubuntu
