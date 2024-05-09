@@ -24,6 +24,8 @@ jobs:
   docker:
     if: ${{ github.event.inputs.tags != 'test' }}
     runs-on: ubuntu-latest
+    permissions:
+      packages: write
     steps:
       - name: Build Arguments
         id: get_arg
