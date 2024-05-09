@@ -12,7 +12,7 @@ It is designed to handle large amount of data and pictures in a distributed envi
 [![Docker Stars](https://img.shields.io/docker/stars/lapicidae/vdr-epg-daemon?color=3c0e7b&label=stars&logo=docker&logoColor=fff&style=for-the-badge)](https://hub.docker.com/r/lapicidae/vdr-epg-daemon)
 [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/lapicidae/vdr-epg-daemon/docker.yml?logo=github&logoColor=ffffff&style=for-the-badge)](https://github.com/lapicidae/vdr-epg-daemon/actions/workflows/docker.yml)
 
-VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) and [s6-overlay](https://github.com/just-containers/s6-overlay).
+VDR EPG Daemon docker image based on [debian](https://hub.docker.com/_/debian) or [Ubuntu](https://hub.docker.com/_/ubuntu) and [s6-overlay](https://github.com/just-containers/s6-overlay).
 
 
 ## Features
@@ -25,8 +25,9 @@ VDR EPG Daemon docker image based on [Ubuntu](https://hub.docker.com/_/ubuntu) a
 * log to file with built-in log rotation
 
 ### *Note*
-The image is automatically rebuilt when any of the following sources receive an update:
+The images are automatically rebuilt when any of the following sources receive an update:
 
+* [debian](https://hub.docker.com/_/debian) Official Docker Image - stable-slim
 * [Ubuntu](https://hub.docker.com/_/ubuntu) Official Docker Image - latest
 * [vdr-epg-daemon](https://github.com/horchi/vdr-epg-daemon) GitHub repository
 * [epgd-plugin-tvm](https://github.com/3PO/epgd-plugin-tvm) GitHub repository
@@ -50,7 +51,7 @@ Compatible with docker-compose v2 schemas.
 version: "2.1"
 services:
   vdr-epg-daemon:
-    image: lapicidae/vdr-epg-daemon
+    image: ghcr.io/lapicidae/vdr-epg-daemon:latest
     container_name: vdr-epg-daemon
     environment:
       - PUID=1000
@@ -84,7 +85,7 @@ docker run -d \
   -v /path/to/channellogos:/epgd/channellogos `#optional` \
   -v /path/to/log:/epgd/log `#optional` \
   --restart unless-stopped \
-  lapicidae/vdr-epg-daemon
+  ghcr.io/lapicidae/vdr-epg-daemon:latest
 ```
 
 ### Parameters

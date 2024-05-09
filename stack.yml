@@ -1,12 +1,13 @@
 version: '2.4'
 services:
   db:
-    image: 'lapicidae/mariadb-epglv:latest'
+    image: 'ghcr.io/lapicidae/mariadb-epglv:latest'
     container_name: mariadb-epglv
     volumes:
       - './MySQL:/var/lib/mysql:rw'
     environment:
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MARIADB_AUTO_UPGRADE=true
+      - MARIADB_ALLOW_EMPTY_ROOT_PASSWORD=true
       - EPGD_RECOMMEND=yes
       - TZ=Europe/Berlin
     command: mysqld
@@ -16,7 +17,7 @@ services:
       - '3306:3306'
     restart: unless-stopped
   vdr-epg-daemon:
-    image: 'lapicidae/vdr-epg-daemon:latest'
+    image: 'ghcr.io/lapicidae/vdr-epg-daemon:latest'
     container_name: vdr-epg-daemon
     depends_on:
       - db
