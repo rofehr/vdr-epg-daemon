@@ -50,6 +50,7 @@ runtimePKG=(
     tzdata
     unzip
     uuid
+    xz-utils
     zlib1g
 )
 buildPKG=(
@@ -68,7 +69,6 @@ buildPKG=(
     python3-dev
     uuid-dev
     wget
-    xz-utils
     zlib1g-dev
 )
 if [ "$baseIMAGE" = 'ubuntu' ]; then
