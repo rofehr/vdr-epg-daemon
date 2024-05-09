@@ -164,7 +164,7 @@ _ntfy 'get channellogos'
 cd /tmp || exit 1
 git clone https://github.com/lapicidae/svg-channellogos.git chlogo
 chmod +x chlogo/tools/install
-chlogo/tools/install -c dark -p /tmp/channellogos -r
+chlogo/tools/install -c light -p /tmp/channellogos -r
 tar -cpJf /defaults/channellogos.tar.xz -C /tmp/channellogos .
 
 _ntfy 'change permissions'
