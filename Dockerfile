@@ -9,7 +9,7 @@ ARG authors="A. Hemmerle <github.com/lapicidae>" \
     DEBIAN_FRONTEND="noninteractive" \
     EPGD_DEV="false" \
     inVM="true" \
-    S6VER="3.1.6.2" \
+    S6VER="3.2.0.0" \
     baseDIGEST \
     baseIMAGE \
     baseTAG \
@@ -19,7 +19,6 @@ ARG authors="A. Hemmerle <github.com/lapicidae>" \
 
 ENV PATH="$PATH:/command"
 ENV LANG="de_DE.UTF-8" \
-    S6_CMD_WAIT_FOR_SERVICES_MAXTIME="0" \
     S6_VERBOSITY="1"
 
 ADD https://github.com/just-containers/s6-overlay/releases/download/v$S6VER/s6-overlay-noarch.tar.xz /tmp

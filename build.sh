@@ -12,7 +12,7 @@ if [ "$EPGD_DEV" = 'true' ]; then
     gitDIR=$(mktemp -d --suffix '_epgdGIT')
     git clone --quiet "$epgdREPO" "$gitDIR"
     cd "$gitDIR" || exit 1
-    
+
     printf -v epgdVersion '%s' "$(git describe --tags)"
     printf -v epgdRevision '%s' "$(git log --pretty=format:'%H' -n 1)"
 
