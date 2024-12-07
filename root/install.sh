@@ -173,6 +173,8 @@ chown -R epgd:epgd /epgd
 chown -R sysllog:sysllog /epgd/log
 chown root:root /usr/local/bin/contenv2env
 chmod 755 /usr/local/bin/contenv2env
+chown root:root /usr/local/bin/healthcheck
+chmod 755 /usr/local/bin/healthcheck
 chown root:root /usr/local/bin/svdrpsend
 chmod 755 /usr/local/bin/svdrpsend
 

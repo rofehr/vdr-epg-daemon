@@ -46,4 +46,7 @@ EXPOSE 9999
 
 VOLUME ["/epgd/cache", "/epgd/config", "/epgd/epgimages"]
 
+HEALTHCHECK --interval=20s --timeout=3s \
+    CMD /usr/local/bin/healthcheck
+
 ENTRYPOINT ["/init"]

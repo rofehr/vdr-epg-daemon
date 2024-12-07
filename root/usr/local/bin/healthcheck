@@ -1,0 +1,24 @@
+#!/bin/bash
+#/usr/local/bin/healthcheck
+
+# services
+servicedir='/run/s6-rc/servicedirs'
+epgD="${servicedir}/epgd"
+epgHTTPD="${servicedir}/epghttpd"
+
+
+START_EPGHTTPD="${START_EPGHTTPD:-"false"}"
+svstat=$(command -v s6-svstat)
+svstat+=' -o up'
+
+
+trap 'exit $?' ERR
+
+
+if [ -d $epgD ]; then
+	$svstat $epgD >/dev/null 2>&1
+fi
+
+if [ -d $epgHTTPD ] && [ "$START_EPGHTTPD" == 'true' ]; then
+	$svstat $epgHTTPD >/dev/null 2>&1
+fi
