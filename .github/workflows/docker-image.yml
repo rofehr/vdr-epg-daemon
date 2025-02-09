@@ -1,0 +1,132 @@
+name: Docker Build & Push
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - README.md
+      - epgd-logo.svg
+      - Jenkinsfile
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Scenario tags'
+        type: choice
+        options:
+          - test
+          - bld_all
+          - bld_debian
+          - bld_ubuntu
+        required: true
+      trigger:
+        type: string
+jobs:
+  docker:
+    if: ${{ github.event.inputs.tags != 'test' }}
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    steps:
+      - name: Build Arguments
+        id: get_arg
+        run: |
+          epgdREPO='https://github.com/horchi/vdr-epg-daemon.git'
+          epgdVersion="$(git ls-remote --tags --sort=-version:refname --refs "$epgdREPO" | head -n 1 | cut -d/ -f3)"
+          printf 'dateTime=%(%Y-%m-%dT%H:%M:%S%z)T\n' >> $GITHUB_OUTPUT
+          printf 'epgdRevision=%s\n' "$(git ls-remote -t "${epgdREPO}" "${epgdVersion}" | cut -f 1)" >> $GITHUB_OUTPUT
+          printf 'epgdVersion=%s\n' "${epgdVersion}" >> $GITHUB_OUTPUT
+          printf 'DEBIANbaseDIGEST=%s\n' "$(docker image pull ${{ env.DEBIANbaseIMAGE }}:${{ env.DEBIANbaseTAG }} | grep -i digest | cut -d ' ' -f 2)" >> $GITHUB_OUTPUT
+          printf 'UBUNTUbaseDIGEST=%s\n' "$(docker image pull ${{ env.UBUNTUbaseIMAGE }}:${{ env.UBUNTUbaseTAG }} | grep -i digest | cut -d ' ' -f 2)" >> $GITHUB_OUTPUT
+      - name: Info
+        run: |
+          printf '<<<<<<<<< BUILD ARGUMENTS >>>>>>>>>\n'
+          printf 'Build Timestamp:\t%s\n' "${{ steps.get_arg.outputs.dateTime }}"
+          printf 'epgd Version:\t\t%s\n' "${{ steps.get_arg.outputs.epgdVersion }}"
+          printf 'epgd Revision:\t\t%s\n' "${{ steps.get_arg.outputs.epgdRevision }}"
+          printf 'debian Base Digest:\t%s\n' "${{ steps.get_arg.outputs.DEBIANbaseDIGEST }}"
+          printf 'Ubuntu Base Digest:\t%s\n' "${{ steps.get_arg.outputs.UBUNTUbaseDIGEST }}"
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Login to DockerHub
+        uses: docker/login-action@v3 
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build and push - DEBIAN
+        if: ${{ (github.event.inputs.tags == 'bld_debian') || (github.event.inputs.tags == 'bld_all') }}
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            baseDIGEST=${{ steps.get_arg.outputs.DEBIANbaseDIGEST }}
+            baseIMAGE=${{ env.DEBIANbaseIMAGE }}
+            baseTAG=${{ env.DEBIANbaseTAG }}
+            dateTime=${{ steps.get_arg.outputs.dateTime }}
+            epgdRevision=${{ steps.get_arg.outputs.epgdRevision }}
+            epgdVersion=${{ steps.get_arg.outputs.epgdVersion }}
+          no-cache: true
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:${{ env.latestTAG }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:debian
+            ghcr.io/${{ github.repository }}:${{ env.latestTAG }}
+            ghcr.io/${{ github.repository }}:debian
+      - name: Build and push - UBUNTU
+        if: ${{ (github.event.inputs.tags == 'bld_ubuntu') || (github.event.inputs.tags == 'bld_all') }}
+        uses: docker/build-push-action@v6
+        with:
+          build-args: |
+            baseDIGEST=${{ steps.get_arg.outputs.UBUNTUbaseDIGEST }}
+            baseIMAGE=${{ env.UBUNTUbaseIMAGE }}
+            baseTAG=${{ env.UBUNTUbaseTAG }}
+            dateTime=${{ steps.get_arg.outputs.dateTime }}
+            epgdRevision=${{ steps.get_arg.outputs.epgdRevision }}
+            epgdVersion=${{ steps.get_arg.outputs.epgdVersion }}
+          no-cache: true
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/${{ env.imageNAME }}:ubuntu
+            ghcr.io/${{ github.repository }}:ubuntu
+      - name: Send mail
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        uses: dawidd6/action-send-mail@v4
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{secrets.GMAIL_USER}}
+          password: ${{secrets.GMAIL_PASS}}
+          from: GitHub
+          to: ${{secrets.EMAIL}}
+          subject: "Action ${{job.status}}: ${{github.repository}} - ${{github.workflow}} (${{github.event.inputs.tags}}) #${{github.run_id}}"
+          body: |
+            ${{job.status}}
+            Action "${{github.workflow}} (${{github.event.inputs.tags}})" started by ${{github.actor}} (${{ github.event.inputs.trigger }}) in ${{github.repository}}.
+            View workflow run: ${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}
+            Your faithful employee
+            ${{runner.name}} (${{runner.os}} - ${{runner.arch}})
+          html_body: |
+            <!DOCTYPE html>
+            <html>
+            <body>
+            <h1 style="text-transform:uppercase">${{job.status}}</h1>
+            <p>Action "${{github.workflow}} (${{github.event.inputs.tags}})" started by ${{github.actor}} (${{ github.event.inputs.trigger }}) in ${{github.repository}}.</p>
+            <p><a href="${{github.server_url}}/${{github.repository}}/actions/runs/${{github.run_id}}" target="_blank" style="background-color:#4CAF50; border:none; color:white; padding:20px; text-align:center; text-decoration:none; display:inline-block; font-size:16px; margin:4px 2px; cursor:pointer; border-radius:12px;">View workflow run</a></p>
+            <p>Your faithful employee<br>
+            ${{runner.name}} (${{runner.os}} - ${{runner.arch}})</p>
+            </body>
+            </html>
+          priority: low
+    env:
+      imageNAME: vdr-epg-daemon
+      latestTAG: latest
+      DEBIANbaseIMAGE: debian
+      DEBIANbaseTAG: stable-slim
+      UBUNTUbaseIMAGE: ubuntu
+      UBUNTUbaseTAG: latest
